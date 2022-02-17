@@ -367,12 +367,5 @@ UStaticMesh* MeshUtils::SkeletalCompToStaticMesh(UWorld* World, USkeletalMeshCom
 
 	}
 
-
-
-
-
-
-
-
 	return TempStaticMesh;
 }
