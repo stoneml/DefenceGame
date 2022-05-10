@@ -2072,3 +2072,9 @@ Intermediate/Build/Win64/UE4Editor/DebugGame/DefenceGame/DefenceGameUtils.cpp.ob
 Intermediate/Build/Win64/UE4Editor/DebugGame/DefenceGame/DefenceGameUtils.cpp.obj.response
 Intermediate/Build/Win64/UE4Editor/DebugGame/DefenceGame/DefenceGameUtils.cpp.txt
 Intermediate/Build/Win64/UE4Editor/DebugGame/DefenceGame/UE4Editor-DefenceGame-Win64-DebugGame.lib.response.old
+.vs/DefenceGame/v16/ipch/AutoPCH/1f2ff15770e7ced8/CAMERA.ipch
+.vs/DefenceGame/v16/ipch/AutoPCH/2292f972b4f3026f/ENGINE.ipch
+.vs/DefenceGame/v16/ipch/AutoPCH/578a7cf07b7cbe66/CAMERA.ipch
+.vs/DefenceGame/v16/ipch/AutoPCH/6978e04d07bb549f/VIEWPORT.ipch
+.vs/DefenceGame/v16/ipch/AutoPCH/92b1e1534877ceef/BTSERVICE_MONSTERFINDTARGET.ipch
+.vs/DefenceGame/v16/ipch/AutoPCH/c673a7d06c1f6799/MONSTERAICONTROLLER.ipch
