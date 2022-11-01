@@ -20,24 +20,24 @@ class DEFENCEGAME_API UUI_ToolBarSystem : public UUI_RuleOfTheWidget
 	
 
 private:
-	//ÓÎÏ·½ğ±ÒÊıÁ¿
+	//æ¸¸æˆé‡‘å¸æ•°é‡
 	UPROPERTY(meta = (BindWidget))
 		UTextBlock* GameGold;
-	//ÎÒ·½ËşËÀÍöÊıÁ¿
+	//æˆ‘æ–¹å¡”æ­»äº¡æ•°é‡
 	UPROPERTY(meta = (BindWidget))
 		UTextBlock* TowerDeathNumber;
-	//ÓÎÏ·Ê±¼ä
+	//æ¸¸æˆæ—¶é—´
 	UPROPERTY(meta = (BindWidget))
 		UTextBlock* GameCount;
-	//»÷É±ÊıÁ¿
+	//å‡»æ€æ•°é‡
 	UPROPERTY(meta = (BindWidget))
 		UTextBlock* KillSolider;
 
-	//ÏÔÊ¾Ê£ÓàµĞÈËÊıÁ¿ (Surplus:Ê£Óà) £¨Quantity£ºÊıÁ¿)
+	//æ˜¾ç¤ºå‰©ä½™æ•Œäººæ•°é‡ (Surplus:å‰©ä½™) ï¼ˆQuantityï¼šæ•°é‡)
 	UPROPERTY(meta = (BindWidget))
 		UTextBlock* GameLevelSurplusQuantity;
 
-	//Íê³É»÷É±½ø¶ÈÌõ
+	//å®Œæˆå‡»æ€è¿›åº¦æ¡
 	UPROPERTY(meta = (BindWidget))
 		UProgressBar* GSQProgressBar;
 
@@ -45,5 +45,6 @@ public:
 
 	virtual void NativeConstruct();
 
-
+	//tick
+	//virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 };

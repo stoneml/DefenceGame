@@ -20,21 +20,21 @@ class DEFENCEGAME_API ARuleOfTheCharacter : public ACharacter, public IRuleChara
 
 private:
 
-	//×îºóÄÇ¸ömeta²ÎÊıÊÇ£¬ÔÊĞíPrivate·ÃÎÊ(meta²ÎÊı¸Ğ¾õÎŞĞ§£¬ËùÒÔ½«ËûÃÇÉèÖÃÎªprotected£©
+	//æœ€åé‚£ä¸ªmetaå‚æ•°æ˜¯ï¼Œå…è®¸Privateè®¿é—®(metaå‚æ•°æ„Ÿè§‰æ— æ•ˆï¼Œæ‰€ä»¥å°†ä»–ä»¬è®¾ç½®ä¸ºprotectedï¼‰
 
-	//ÉäÏß×·×Ù¶ÔÏó
+	//å°„çº¿è¿½è¸ªå¯¹è±¡
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BaseAttribute", meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* TraceShowCharacterInfomation;
 
-	//¿ª»ğµã
+	//å¼€ç«ç‚¹
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BaseAttribute", meta = (AllowPrivateAccess = "true"))
 		class UArrowComponent* OpenFirePoint;
 
-	//ÏÔÊ¾½ÇÉ«ĞÅÏ¢ÓÃµÄwidget×é¼ş
+	//æ˜¾ç¤ºè§’è‰²ä¿¡æ¯ç”¨çš„widgetç»„ä»¶
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BaseAttribute", meta = (AllowPrivateAccess = "true"))
 		class UWidgetComponent* Widget;
 
-	//×Óµ¯×·×Ùµã
+	//å­å¼¹è¿½è¸ªç‚¹
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BaseAttribute", meta = (AllowPrivateAccess = "true"))
 		class USceneComponent* HomingPoint;
 
@@ -50,21 +50,21 @@ protected:
 
 public:
 
-	//»ñÈ¡µ±Ç°CharacterÄ£ĞÍÓÃÓÚ½øĞĞ°Ú·ÅÑİÊ¾
+	//è·å–å½“å‰Characteræ¨¡å‹ç”¨äºè¿›è¡Œæ‘†æ”¾æ¼”ç¤º
 	UFUNCTION(BlueprintCallable, Category = "Tower|Test")
 	UStaticMesh* GetDollMesh();
 
-	//¸üĞÂÑªÁ¿
+	//æ›´æ–°è¡€é‡
 	void UpdateUI();
 
-	//´´½¨Ò»¸öDrawtext
+	//åˆ›å»ºä¸€ä¸ªDrawtext
 	UPROPERTY(EditDefaultsOnly,Category = UI)
 	TSubclassOf<class ADrawText> DrawTextClass;
 
 
 public:
 
-	//¼Ì³Ğ½Ó¿ÚµÄ·µ»Ø½ÇÉ«ÀàĞÍ
+	//ç»§æ‰¿æ¥å£çš„è¿”å›è§’è‰²ç±»å‹
 	virtual EGameCharacterType::Type GetType();
 
 	virtual bool IsDeath()override;
@@ -72,7 +72,7 @@ public:
 	virtual float GetMaxHealth()override;
 	virtual bool IsTeam()override;
 
-	//´Ó½Ó¿ÚÖĞµ÷ÓÃ»ñÈ¡Êı¾İµÄ½Ó¿Ú
+	//ä»æ¥å£ä¸­è°ƒç”¨è·å–æ•°æ®çš„æ¥å£
 	virtual FCharacterData& GetCharacterData() override;
 
 public:	
@@ -81,18 +81,19 @@ public:
 
 protected:
 
-	//UE×Ô¼ºµÄÊÜÉËº¯Êı
+	//UEè‡ªå·±çš„å—ä¼¤å‡½æ•°
+	//ä¼¤å®³çš„æ•°å€¼
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)override;
 
 
 
 
-	//»ñÈ¡GameController
-	//Ê¹ÓÃ×ª»»µÄ·½·¨
+	//è·å–GameController
+	//ä½¿ç”¨è½¬æ¢çš„æ–¹æ³•
 	//FORCEINLINE ATowerDefenceGamePlayerController* GetGamePlayerController() { return GetWorld() ? (Cast<ATowerDefenceGamePlayerController>(GetWorld()->GetFirstPlayerController())): nullptr; }
 	FORCEINLINE ATowerDefenceGamePlayerController* GetGamePlayerController() { return GetWorld() ? GetWorld()->GetFirstPlayerController<ATowerDefenceGamePlayerController>() : nullptr; }
 
-	//»ñÈ¡GameState
+	//è·å–GameState
 	FORCEINLINE ATowerDefenceGameState* GetGameState() { return GetWorld() ? GetWorld()->GetGameState<ATowerDefenceGameState>() : nullptr; }
 
 
@@ -100,15 +101,15 @@ protected:
 
 
 public:
-	//¼ÓÉÏConstÊÇÎªÁË±£Ö¤º¯ÊıÄÚ²¿µÄ¶«Î÷²»±»ĞŞ¸Ä
+	//åŠ ä¸ŠConstæ˜¯ä¸ºäº†ä¿è¯å‡½æ•°å†…éƒ¨çš„ä¸œè¥¿ä¸è¢«ä¿®æ”¹
 
-	//±©Â¶¸ú×Ùµã
+	//æš´éœ²è·Ÿè¸ªç‚¹
 	FORCEINLINE USceneComponent* GetHomingPoint() const { return HomingPoint; }
-	//±©Â¶¿ª»ğµã
+	//æš´éœ²å¼€ç«ç‚¹
 	FORCEINLINE UArrowComponent* GetOpenFirePoint() const { return OpenFirePoint; }
 
-	//½«ËşµÄµ±Ç°Çé¿ö·µ¸øÀ¶Í¼£¬ÈÃÀ¶Í¼ÅĞ¶ÏËşÊÇ·ñ´æ»î
-	//ÕâÀï·µ»ØµÄÒªÊÇ·´ÏòµÄ
+	//å°†å¡”çš„å½“å‰æƒ…å†µè¿”ç»™è“å›¾ï¼Œè®©è“å›¾åˆ¤æ–­å¡”æ˜¯å¦å­˜æ´»
+	//è¿™é‡Œè¿”å›çš„è¦æ˜¯åå‘çš„
 	UFUNCTION(BlueprintCallable,BlueprintPure, Category = "Towers|Attribute")
 	bool IsActive() { return !IsDeath(); }
 
@@ -116,11 +117,11 @@ public:
 
 public:
 
-	//±©Â¶¸øAnimInstanceÀ¶Í¼£¬Í¨ÖªÊÇ·ñ½øĞĞ¹¥»÷
+	//æš´éœ²ç»™AnimInstanceè“å›¾ï¼Œé€šçŸ¥æ˜¯å¦è¿›è¡Œæ”»å‡»
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AnimAttibute")
 		bool bAttack;
 
-	//½ÇÉ«ID
+	//è§’è‰²ID
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AnimAttibute")
 	FGuid CurrentGUID;
 
@@ -129,7 +130,7 @@ public:
 
 
 
-	//ÊäÈë¹¦ÄÜÔÚControllerÖĞÊµÏÖ£¬ËùÒÔ²»ĞèÒªÔÚPawnÖĞ»¹ÓĞ
+	//è¾“å…¥åŠŸèƒ½åœ¨Controllerä¸­å®ç°ï¼Œæ‰€ä»¥ä¸éœ€è¦åœ¨Pawnä¸­è¿˜æœ‰
 	// Called to bind functionality to input
 	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

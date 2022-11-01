@@ -21,7 +21,7 @@ class UGameSaveData;
 class UGameSaveSlotList;
 //struct ECharacterType;
 
- //Í¨¹ıexternÀ´½øĞĞÍ¨ÖªÍâ²¿ÓĞÕâ¸ö±äÁ¿
+ //é€šè¿‡externæ¥è¿›è¡Œé€šçŸ¥å¤–éƒ¨æœ‰è¿™ä¸ªå˜é‡
   extern FCharacterData CharacterDataNULL;
   extern FBuildingTower BuildingTowerNULL;
 
@@ -36,20 +36,20 @@ public:
 	ATowerDefenceGameState();
 
 
-	//±©Â¶Éú³É½Ó¿ÚÌá¹©Íâ²¿µ÷ÓÃ
+	//æš´éœ²ç”Ÿæˆæ¥å£æä¾›å¤–éƒ¨è°ƒç”¨
 	UFUNCTION(BlueprintCallable,Category = "Spawn")
 	ATowers* SpawnTower(int32 CharacterID, int32 CharacterLevel, const FVector& Location, const FRotator& Rotation);
 
 	UFUNCTION(BlueprintCallable,Category = "Spawn")
 	AMonster* SpawnMonster(int32 CharacterID, int32 CharacterLevel, const FVector& Location, const FRotator& Rotation);
 
-	//Éú³É´´½¨ËşµÄÄ£ĞÍ
+	//ç”Ÿæˆåˆ›å»ºå¡”çš„æ¨¡å‹
 	AActor* SpawnTowersDoll(int32 InID);
 
 protected:
 
-	//´´½¨Éú³É½ÇÉ«¡£
-	//·µ»ØÒ»¸öÖ¸Õë
+	//åˆ›å»ºç”Ÿæˆè§’è‰²ã€‚
+	//è¿”å›ä¸€ä¸ªæŒ‡é’ˆ
 	ARuleOfTheCharacter* SpawnCharacter(int32 CharacterID,
 		int32 CharacterLevel,
 		UDataTable* InCharacterData, 
@@ -57,7 +57,7 @@ protected:
 		const FRotator& Rotation);
 
 
-	//´´½¨Ò»¸öÄ£°åÀ´½øĞĞActorµÄSpawn
+	//åˆ›å»ºä¸€ä¸ªæ¨¡æ¿æ¥è¿›è¡ŒActorçš„Spawn
 	template<class T>
 	T* SpawnCharacter(int32 CharacterID, int32 CharacterLevel, UDataTable* InCharacterData, const FVector& Location, const FRotator& Rotation)
 	{
@@ -65,48 +65,46 @@ protected:
 	}
 
 
-
-
 public:
 
-	//´´½¨ÔöÉ¾¸Ä²éµÄ½Ó¿Ú
+	//åˆ›å»ºå¢åˆ æ”¹æŸ¥çš„æ¥å£
 	const FCharacterData& AddFCharacterData(const FGuid& ID, const FCharacterData& Data);
 	
 	bool RemoveCharacterData(const FGuid& ID);
 
 	FCharacterData& GetCharacterData(const FGuid& ID);
 
-	//»ñÈ¡µ±Ç°µÄSaveGameData
+	//è·å–å½“å‰çš„SaveGameData
 	UGameSaveData* GetSaveData();
 
-	//»ñÈ¡µ±Ç°SlotList
+	//è·å–å½“å‰SlotList
 	UGameSaveSlotList* GetGameSaveSlotList();
 
-	//±£´æ½ÇÉ«Êı¾İ
+	//ä¿å­˜è§’è‰²æ•°æ®
 	bool SaveGameData(int32 SaveNumber);
 
-	//¶ÁÈ¡±£´æÊı¾İ
+	//è¯»å–ä¿å­˜æ•°æ®
 	bool LoadSaveGameData(int32 SaveNumber);
 
 
 	//BuildingTower
 
-	//»ñÈ¡BuildingTower
+	//è·å–BuildingTower
 	FBuildingTower& GetBuildingTower(const FGuid& ID);
 
-	//»ñÈ¡µ±Ç°BuildingTowerID
+	//è·å–å½“å‰BuildingTowerID
 	TArray<const FGuid*>GetBuildingTowerID();
 
 
-	//Ìí¼ÓBuildingTower
+	//æ·»åŠ BuildingTower
 	const FBuildingTower& AddBulidingTower(const FGuid& ID, const FBuildingTower& Data);
 
-	//´ÓÊı¾İ±íÖĞ»ñÈ¡½ÇÉ«Êı¾İ
+	//ä»æ•°æ®è¡¨ä¸­è·å–è§’è‰²æ•°æ®
 	bool GetTowerCharacterDataFromTable(TArray<const FCharacterData*> &Datas);
 	bool GetMonsterCharacterDataFromTable(TArray<const FCharacterData*> &Datas);
 
-	//Õë¶ÔTipUIÔö¼ÓÄÚÈİ
-	//Í¨¹ıID»ñÈ¡¶ÔÓ¦µÄData²ÎÊı
+	//é’ˆå¯¹TipUIå¢åŠ å†…å®¹
+	//é€šè¿‡IDè·å–å¯¹åº”çš„Dataå‚æ•°
 	const FCharacterData GetCharacterDataByID(int32 InID, ECharacterType Type = ECharacterType::TOWER);
 
 	//TArray<FCharacterData*>GetCurrnetCharacterDataFromTable();
@@ -115,51 +113,39 @@ public:
 	void PrintInfo();
 
 
-	
-
-
-
-
-
-	//½øĞĞslotµÄÇĞ»»²Ù×÷
-	
+	//è¿›è¡Œslotçš„åˆ‡æ¢æ“ä½œ
 	bool RequestInvetorySlotSwap(const FGuid& A, const FGuid& B);
-
 
 private:
 
-	//ÕâÀïµÄID¸ÄÎªÊ¹ÓÃUE×Ô¼ºµÄUniqueID
+	//è¿™é‡Œçš„IDæ”¹ä¸ºä½¿ç”¨UEè‡ªå·±çš„UniqueID
 
 /*
-	//´´½¨Ò»¸öÊı¾İÊı×é
+	//åˆ›å»ºä¸€ä¸ªæ•°æ®æ•°ç»„
 	UPROPERTY()
 	TMap<uint32,FCharacterData> CharacterDatas;*/
 
-	//´´½¨Ò»¸ö±£´æÊı¾İÓÃÀ´Ìæ´úÖ®Ç°µÄÊı¾İData
+	//åˆ›å»ºä¸€ä¸ªä¿å­˜æ•°æ®ç”¨æ¥æ›¿ä»£ä¹‹å‰çš„æ•°æ®Data
 	UPROPERTY()
 	UGameSaveData* CurrentSaveData;
 
-	//µ±Ç°Savelist
+	//å½“å‰Savelist
 	UPROPERTY()
 	UGameSaveSlotList* CurrentSaveList;
 
 
-	//ËşµÄÊı¾İ±í¸ñ
+	//å¡”çš„æ•°æ®è¡¨æ ¼
 	UPROPERTY()
 	UDataTable* AITowerCharacterData;
 
-	//¹ÖÎïµÄÊı¾İ±í¸ñ
+	//æ€ªç‰©çš„æ•°æ®è¡¨æ ¼
 	UPROPERTY()
 	UDataTable* AIMonsterCharacterData;
 
-
-
-	//½ÇÉ«Êı×é
+	//è§’è‰²æ•°ç»„
 	TArray<FGuid>CharacterIDs;
 
-
-
-	//Ìí¼ÓÈ«¾ÖµÄ¶ÔÓ¦TowerµÄData
+	//æ·»åŠ å…¨å±€çš„å¯¹åº”Towerçš„Data
 	TArray<FCharacterData*> TowerCacheDatas;
 
 	TArray<FCharacterData*> MonsterCacheDatas;
