@@ -9,9 +9,9 @@
 
 
 class USplineComponent;
+class UWorld;
+class ARuleOfTheCharacter;
 
-
-#define PI 3.1415926
 
 
 UCLASS()
@@ -19,10 +19,9 @@ class DEFENCEGAME_API ARuleOfTheBullet : public AActor
 {
 	GENERATED_BODY()
 	
-	//Èç¹û½«±äÁ¿Ğ´ÔÚPrivateÀïÃæµÄ»°¿ÉÒÔÊ¹ÓÃÕâ¶Î
-	// meta = (AllowPrivateAcces = "true")Ö÷Òª¾ÍÊÇÕâÒ»¶Î£¬ÔÊĞí·ÃÎÊË½ÓĞ±äÁ¿
+	//å¦‚æœå°†å˜é‡å†™åœ¨Privateé‡Œé¢çš„è¯å¯ä»¥ä½¿ç”¨è¿™æ®µ
+	// meta = (AllowPrivateAcces = "true")ä¸»è¦å°±æ˜¯è¿™ä¸€æ®µï¼Œå…è®¸è®¿é—®ç§æœ‰å˜é‡
 	//UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "BaseAttribute",meta = (AllowPrivateAcces = "true"))
-
 
 public:	
 	// Sets default values for this actor's properties
@@ -36,50 +35,49 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//Ğ´Ò»¸ö½Ó´¥ºóµÄ½Ó¿Ú(ĞèÒª±»°ó¶¨µÄ½Ó¿Ú£¬ĞèÒªÌí¼ÓUFUNCTION)
-	//Åö×²µ½µÄActor¡¢Åö×²µ½µÄ×é¼ş¡¢BodyIndex¡¢ÊÇ·ñÉ¨Ãè¡¢Åö×²½á¹û
+	//å†™ä¸€ä¸ªæ¥è§¦åçš„æ¥å£(éœ€è¦è¢«ç»‘å®šçš„æ¥å£ï¼Œéœ€è¦æ·»åŠ UFUNCTION)
+	//ç¢°æ’åˆ°çš„Actorã€ç¢°æ’åˆ°çš„ç»„ä»¶ã€BodyIndexã€æ˜¯å¦æ‰«æã€ç¢°æ’ç»“æœ
 	UFUNCTION()
 	void BeginOverlap(UPrimitiveComponent* OverlappedComponent,AActor* OtherActor,UPrimitiveComponent* OtherComp,int32 OtherBodyIndex,bool bFromSweep,const FHitResult& SweepResult);
 
-	//·â×°·¶Î§¹¥»÷
+	//å°è£…èŒƒå›´æ”»å‡»
 	void RadialDamage(const FVector& Origin, ARuleOfTheCharacter* InstigatorCharacter);
-
 
 protected:
 
-	// ĞèÒªÊ¹ÓÃUfunction²ÅÄÜÈÃUEº¯ÊıÕÒµ½
+	// éœ€è¦ä½¿ç”¨Ufunctionæ‰èƒ½è®©UEå‡½æ•°æ‰¾åˆ°
 	UFUNCTION()
 	void CurrentChianAttack();
 
 
 protected:
 
-	//Åö×²¼ì²â
+	//ç¢°æ’æ£€æµ‹
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "BaseAttribute")
 	class USphereComponent* SphereDamage;
 
-	//³¡¾°¸ù×é¼ş
+	//åœºæ™¯æ ¹ç»„ä»¶
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "BaseAttribute")
 	class USceneComponent* RootBullet;
 
-	//µ¯Éä×é¼şProjectileMovementComponent
+	//å¼¹å°„ç»„ä»¶ProjectileMovementComponent
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "BaseAttribute")
 	class UProjectileMovementComponent* ProjectileComponent;
 
 public:
 
-	//×Óµ¯ÀàĞÍ
+	//å­å¼¹ç±»å‹
 	UPROPERTY(EditDefaultsOnly,Category = "Bullet")
-	TEnumAsByte<EBulletType> BulletType;   //Ê¹ÓÃÕâ¸öAsByte¾ÍÄÜ½øĞĞByte×ª»»ÁË
+	TEnumAsByte<EBulletType> BulletType;   //ä½¿ç”¨è¿™ä¸ªAsByteå°±èƒ½è¿›è¡ŒByteè½¬æ¢äº†
 
-	//ÉËº¦ÌØĞ§
+	//ä¼¤å®³ç‰¹æ•ˆ
 	UPROPERTY(EditDefaultsOnly,Category = "Bullet")
 	UParticleSystem* DamageParticle;
-	//·¢ÉäÌØĞ§
+	//å‘å°„ç‰¹æ•ˆ
 	UPROPERTY(EditDefaultsOnly,Category = "Bullet")
 	UParticleSystem* OpenFireParticle;
 
-	//ÉÁµçÁ´µÄ¹¥»÷¼ÆÊı
+	//é—ªç”µé“¾çš„æ”»å‡»è®¡æ•°
 	int32 ChainAttackCount;
 
 /*
@@ -89,16 +87,14 @@ public:
 
 private:
 
-	//×·×Ùµ¯Ê¹ÓÃµÄÑùÌõÏß
+	//è¿½è¸ªå¼¹ä½¿ç”¨çš„æ ·æ¡çº¿
 	UPROPERTY()
 	USplineComponent* TraceSpline;
 
 	UPROPERTY()
 	float CurrentTickTime;
 
-	//Í¨¹ıÒ»¸ö¶¨Ê±Æ÷À´½øĞĞÉËº¦º¯ÊıÖÜÆÚµ÷ÓÃ
+	//é€šè¿‡ä¸€ä¸ªå®šæ—¶å™¨æ¥è¿›è¡Œä¼¤å®³å‡½æ•°å‘¨æœŸè°ƒç”¨
 	FTimerHandle ChainAttackTimer;
-
-	
 
 };

@@ -20,6 +20,8 @@
 #include "Kismet/KismetSystemLibrary.h"
 
 
+#define PI 3.1415926
+
 // Sets default values
 ARuleOfTheBullet::ARuleOfTheBullet()
 {
@@ -31,24 +33,24 @@ ARuleOfTheBullet::ARuleOfTheBullet()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//×é¼ş´´½¨
+	//ç»„ä»¶åˆ›å»º
 	SphereDamage = CreateDefaultSubobject<USphereComponent>(TEXT("BulletDamage"));
 	RootBullet = CreateDefaultSubobject<USceneComponent>(TEXT("BulletRootBullet"));
 	ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("BulletProjectileComponent"));
 
-	//×é¼ş°ó¶¨
+	//ç»„ä»¶ç»‘å®š
 	RootComponent = RootBullet;
 	SphereDamage->AttachToComponent(RootBullet, FAttachmentTransformRules::KeepRelativeTransform);
 
-	//ÉèÖÃµ¯Éä×é¼şµÄ³õÊ¼×´Ì¬
+	//è®¾ç½®å¼¹å°„ç»„ä»¶çš„åˆå§‹çŠ¶æ€
 	ProjectileComponent->MaxSpeed = 2000.f;
 	ProjectileComponent->InitialSpeed = 1600.f;
-	ProjectileComponent->ProjectileGravityScale = 0.f;  //ÉèÖÃÖØÁ¦Îª0
-	ProjectileComponent->UpdatedComponent = SphereDamage;  //Ğ§¹ûÓ°Ïìµ½¶ÔÓ¦µÄ×é¼ş
+	ProjectileComponent->ProjectileGravityScale = 0.f;  //è®¾ç½®é‡åŠ›ä¸º0
+	ProjectileComponent->UpdatedComponent = SphereDamage;  //æ•ˆæœå½±å“åˆ°å¯¹åº”çš„ç»„ä»¶
 
 	BulletType = EBulletType::BULLET_DIRECT_LINE;
 
-	//ÉèÖÃ×Óµ¯´æ»îÊ±¼ä
+	//è®¾ç½®å­å¼¹å­˜æ´»æ—¶é—´
 	InitialLifeSpan = 4.f;
 
 }
@@ -65,7 +67,7 @@ void ARuleOfTheBullet::BeginPlay()
 			if (ARuleOfTheCharacter* TargetCharacter = Cast<ARuleOfTheCharacter>(InstigatorController->CurrentTarget.Get()))
 			{
 
-				//Í¨¹ıÀàĞÍ³õÊ¼»¯×Óµ¯×´Ì¬
+				//é€šè¿‡ç±»å‹åˆå§‹åŒ–å­å¼¹çŠ¶æ€
 				switch (BulletType)
 				{
 				case EBulletType::BULLET_DIRECT_LINE:
@@ -81,11 +83,11 @@ void ARuleOfTheBullet::BeginPlay()
 					ProjectileComponent->bIsHomingProjectile = true;
 					ProjectileComponent->bRotationFollowsVelocity = true;
 
-					//Ê×ÏÈ»ñÈ¡Ê©·¨Õß£¨·¢Éä×Óµ¯µÄActor£©
-					//Í¨¹ıµ±Ç°¶ÔÏóµÄcontroller»ñÈ¡»ùÀàController£¬È»ºó»ñÈ¡µ½Ä¿±ê
-					//»ñÈ¡µ½controllerÖĞµÄtarget£¨Õâ¸ötargetÊÇÈõÖ¸Õë£¬ĞèÒªÊ¹ÓÃ.Get() À´½øĞĞ×ª»»ÎªÂãÖ¸Õë£©
-					//ÉèÖÃ×Óµ¯µÄµ¯ÉäÉèÖÃ£¬HomingAccelerationMagnitude£¨µ±Ç°×·×ÙÄ¿±êµÄ¼ÓËÙ¶È´óĞ¡£©£¬ÉèÖÃÎª4000
-					//Ìí¼ÓHomingTargetComponentÎªÄ¿±êÉíÉÏµÄHomingTarget
+					//é¦–å…ˆè·å–æ–½æ³•è€…ï¼ˆå‘å°„å­å¼¹çš„Actorï¼‰
+					//é€šè¿‡å½“å‰å¯¹è±¡çš„controllerè·å–åŸºç±»Controllerï¼Œç„¶åè·å–åˆ°ç›®æ ‡
+					//è·å–åˆ°controllerä¸­çš„targetï¼ˆè¿™ä¸ªtargetæ˜¯å¼±æŒ‡é’ˆï¼Œéœ€è¦ä½¿ç”¨.Get() æ¥è¿›è¡Œè½¬æ¢ä¸ºè£¸æŒ‡é’ˆï¼‰
+					//è®¾ç½®å­å¼¹çš„å¼¹å°„è®¾ç½®ï¼ŒHomingAccelerationMagnitudeï¼ˆå½“å‰è¿½è¸ªç›®æ ‡çš„åŠ é€Ÿåº¦å¤§å°ï¼‰ï¼Œè®¾ç½®ä¸º4000
+					//æ·»åŠ HomingTargetComponentä¸ºç›®æ ‡èº«ä¸Šçš„HomingTarget
 
 					ProjectileComponent->HomingAccelerationMagnitude = 4000.f;
 					ProjectileComponent->HomingTargetComponent = TargetCharacter->GetHomingPoint();
@@ -94,19 +96,19 @@ void ARuleOfTheBullet::BeginPlay()
 				break;
 				case EBulletType::BULLET_TRACK_LINE_SP:
 				{
-					//Ê×ÏÈĞèÒªÔÚ·¢ÉäÊ±Éú³ÉÌØĞ§¡£
+					//é¦–å…ˆéœ€è¦åœ¨å‘å°„æ—¶ç”Ÿæˆç‰¹æ•ˆã€‚
 					ProjectileComponent->StopMovementImmediately();
 					UGameplayStatics::SpawnEmitterAtLocation(this, OpenFireParticle, GetActorLocation());
 					TraceSpline = NewObject<USplineComponent>(this, TEXT("TraceSpline"));
 					TraceSpline->RegisterComponent();
 
-					//¡ñ ´´½¨Spline£¬È»ºóµÚÒ»¸öµãµÄÎ»ÖÃÊÇÅÚµ¯×ÔÉíÎ»ÖÃ
-					//¡ñ ¼õ·¨£¬¼õË­¾Í¼ÓÉÏË­£¬µÃµ½µÄ¾ÍÊÇÖÕµãµÄÎ»ÖÃ¡££¨Ç°ÌáA´óÓÚB£©
-					//¡ñ È»ºóÉèÖÃ¸ß¶È
-					//¡ñ //ÕâÀïµÄYÖá±ãÒËÊÇ¿ÉÒÔ×Ô¶¨ÒåµÄ£¬ÈÃ×Óµ¯·ÉÆğÀ´¸üÅ¤Çú¡£
-					//¡ñ ¸Õ²Å¼ÆËãµÄÎ»ÖÃ×îºóÉèÖÃ¸øµãÒ»¡£
-					//¡ñ ×îºó¾ÍÊÇÌí¼ÓÒ»¸öµãÎ»£¬×îºóÕâ¸öµãÎ»¾ÍÊÇ·ÅÔÚµĞÈËµÄÎ»ÖÃ(Î»ÖÃ¿Õ¼äÎªLocal)¡£
-					//¡ñ ÒòÎªÊÇ°´ÕÕSplineÀ´½øĞĞÒÆ¶¯£¬ËùÒÔÕâÀïÖ±½Ó¾ÍÍ£Ö¹ÁËProjectileMovementµÄÒÆ¶¯²Ù×÷¡£
+					//â— åˆ›å»ºSplineï¼Œç„¶åç¬¬ä¸€ä¸ªç‚¹çš„ä½ç½®æ˜¯ç‚®å¼¹è‡ªèº«ä½ç½®
+					//â— å‡æ³•ï¼Œå‡è°å°±åŠ ä¸Šè°ï¼Œå¾—åˆ°çš„å°±æ˜¯ç»ˆç‚¹çš„ä½ç½®ã€‚ï¼ˆå‰æAå¤§äºBï¼‰
+					//â— ç„¶åè®¾ç½®é«˜åº¦
+					//â— //è¿™é‡Œçš„Yè½´ä¾¿å®œæ˜¯å¯ä»¥è‡ªå®šä¹‰çš„ï¼Œè®©å­å¼¹é£èµ·æ¥æ›´æ‰­æ›²ã€‚
+					//â— åˆšæ‰è®¡ç®—çš„ä½ç½®æœ€åè®¾ç½®ç»™ç‚¹ä¸€ã€‚
+					//â— æœ€åå°±æ˜¯æ·»åŠ ä¸€ä¸ªç‚¹ä½ï¼Œæœ€åè¿™ä¸ªç‚¹ä½å°±æ˜¯æ”¾åœ¨æ•Œäººçš„ä½ç½®(ä½ç½®ç©ºé—´ä¸ºLocal)ã€‚
+					//â— å› ä¸ºæ˜¯æŒ‰ç…§Splineæ¥è¿›è¡Œç§»åŠ¨ï¼Œæ‰€ä»¥è¿™é‡Œç›´æ¥å°±åœæ­¢äº†ProjectileMovementçš„ç§»åŠ¨æ“ä½œã€‚
 
 					TraceSpline->SetLocationAtSplinePoint(0, GetActorLocation(), ESplineCoordinateSpace::Local);
 
@@ -124,73 +126,73 @@ void ARuleOfTheBullet::BeginPlay()
 				{
 					ProjectileComponent->StopMovementImmediately();
 
-					//Ê×ÏÈ»ñÈ¡Ê©·¨Õß
-					//»ñÈ¡Ê©·¨ÕßµÄController ÎªÁË»ñÈ¡ÆäÖĞµÄTarget (TargetĞèÒª»ñÈ¡BaseControllerÀ´»ñÈ¡£©
-					//»ñÈ¡Target²¢×ª»»ÎªARuleOfCharacter
-					//¿ªÆôProjectileMovementµÄÖØÁ¦¡£
-					//¼ÆËãÅÚµ¯ºÍTargetµÄ¾àÀë¡£
-					//Í¨¹ı t = S/v ¼ÆËã³öÊ±¼ä £¨ÈıÎ¬µÄ£©
-					//Í¨¹ı gt¼ÆËãµÃµ½YÖáµÄÖµ¡£
-					//Í¨¹ı³õÊ¼ËÙ¶È v * t ¼ÆËã³öXÖáÏòµÄ³¤¶È¡£
-					//Í¨¹ı¹´¹É¶¨Àí¼ÆËã³ö·¢ÉäÊÇµÄ vµÄËÙ¶È¡£
-					//Í¨¹ı¹«Ê½½øĞĞ·¢Éä»¡¶Ècos¼ÆËã(·´ÓàÏÒ£©¡£(ĞèÒª³ËÒÔ c = PI*0.1£©
-					//È»ºó½«»¡¶È×ªÎª½Ç¶È = »¡¶È * £¨180 / PI£©
-					//×îºóÉèÖÃÅÚµ¯Ğı×ªÖµ
-					//¸øPorjectileÖØĞÂÉè¶¨Ò»¸öËÙ¶È£¬X ÖáÏòÕı·½Ïò* ·¢Éä³õÊ¼ËÙ¶È
+					//é¦–å…ˆè·å–æ–½æ³•è€…
+					//è·å–æ–½æ³•è€…çš„Controller ä¸ºäº†è·å–å…¶ä¸­çš„Target (Targetéœ€è¦è·å–BaseControlleræ¥è·å–ï¼‰
+					//è·å–Targetå¹¶è½¬æ¢ä¸ºARuleOfCharacter
+					//å¼€å¯ProjectileMovementçš„é‡åŠ›ã€‚
+					//è®¡ç®—ç‚®å¼¹å’ŒTargetçš„è·ç¦»ã€‚
+					//é€šè¿‡ t = S/v è®¡ç®—å‡ºæ—¶é—´ ï¼ˆä¸‰ç»´çš„ï¼‰
+					//é€šè¿‡ gtè®¡ç®—å¾—åˆ°Yè½´çš„å€¼ã€‚
+					//é€šè¿‡åˆå§‹é€Ÿåº¦ v * t è®¡ç®—å‡ºXè½´å‘çš„é•¿åº¦ã€‚
+					//é€šè¿‡å‹¾è‚¡å®šç†è®¡ç®—å‡ºå‘å°„æ˜¯çš„ vçš„é€Ÿåº¦ã€‚
+					//é€šè¿‡å…¬å¼è¿›è¡Œå‘å°„å¼§åº¦cosè®¡ç®—(åä½™å¼¦ï¼‰ã€‚(éœ€è¦ä¹˜ä»¥ c = PI*0.1ï¼‰
+					//ç„¶åå°†å¼§åº¦è½¬ä¸ºè§’åº¦ = å¼§åº¦ * ï¼ˆ180 / PIï¼‰
+					//æœ€åè®¾ç½®ç‚®å¼¹æ—‹è½¬å€¼
+					//ç»™Porjectileé‡æ–°è®¾å®šä¸€ä¸ªé€Ÿåº¦ï¼ŒX è½´å‘æ­£æ–¹å‘* å‘å°„åˆå§‹é€Ÿåº¦
 
-					ProjectileComponent->ProjectileGravityScale = 1.f;  //ÉèÖÃÖØÁ¦
+					ProjectileComponent->ProjectileGravityScale = 1.f;  //è®¾ç½®é‡åŠ›
 				/*	FVector DistanceVector = Target->GetActorLocation() - GetActorLocation();
 
 					float InTime = DistanceVector.Size() / (ProjectileComponent->InitialSpeed);
-					float Y = ProjectileComponent->GetGravityZ() * InTime;	//Y·½Ïò¸ß¶È
-					float X = ProjectileComponent->InitialSpeed * InTime;  //X·½Ïò³¤¶È
+					float Y = ProjectileComponent->GetGravityZ() * InTime;	//Yæ–¹å‘é«˜åº¦
+					float X = ProjectileComponent->InitialSpeed * InTime;  //Xæ–¹å‘é•¿åº¦
 
-					float V = FMath::Sqrt(X * X + Y * Y);  //¹´¹É¶¨Àí¼ÆËã
+					float V = FMath::Sqrt(X * X + Y * Y);  //å‹¾è‚¡å®šç†è®¡ç®—
 					float CosRadian = FMath::Acos(DistanceVector.Size() / (V * (InTime * (PI * 0.1f))));
 					FRotator Rot = GetActorRotation();
 					Rot.Pitch = CosRadian * (180 / PI);
 					SetActorRotation(Rot);*/
 
-					//Õâ¸öÉËº¦ÓĞÎÊÌâ¡£
+					//è¿™ä¸ªä¼¤å®³æœ‰é—®é¢˜ã€‚
 					FVector DistanceVector = TargetCharacter->GetActorLocation() - GetActorLocation();
 					float InTime = DistanceVector.Size() / ProjectileComponent->InitialSpeed;
 
-					// tan ¶Ô±ßÓëÁÚ±ßµÄ±ÈÖµ
+					// tan å¯¹è¾¹ä¸é‚»è¾¹çš„æ¯”å€¼
 					float TanRadian = FMath::Atan(((ProjectileComponent->GetGravityZ() * (InTime)) * (PI * 0.1f)) / (DistanceVector.Size() / 2));
 					FRotator Rot = GetActorRotation();
 					//Rot.Pitch = TanRadian*(180/PI);
 					Rot.Pitch = TanRadian;
 					SetActorRotation(Rot);
 
-					//ÖØĞÂÉè¶¨ËÙ¶È
+					//é‡æ–°è®¾å®šé€Ÿåº¦
 					ProjectileComponent->SetVelocityInLocalSpace(FVector(1.f, 0.f, 0.f) * ProjectileComponent->InitialSpeed);
 				}
 				break;
 				case EBulletType::BULLET_RANGE:
 
-					//Ê×ÏÈ»ñµÃÊ©·¨Õß
-					//Í£Ö¹ProjectileÒÆ¶¯
-					//Ê¹ÓÃµü´úÆ÷»ñÈ¡³¡¾°ËùÓĞµÄARuleOfCharacter
-					//µü´úÉ¸Ñ¡£¬ÅĞ¶Ïµ±Ç°Ä¿±êÊÇ·ñ¿ÉÒÔ×ªÎªARuleOfCharacter
-					//¼ÆËã¾àÀë£¬Èç¹û¾àÀëĞ¡ÓÚ1400¾Í·¢Éä
-					//ÅĞ¶ÏÄ¿±êÕóÓª£¬Èç¹ûÊÇÓÑ·½¾Í²»Ôì³ÉÉËº¦
-					//²»ÊÇ¾Í´¥·¢±¬Õ¨Ğ§¹ûÒÔ¼°Ôì³ÉÉËº¦¡£
+					//é¦–å…ˆè·å¾—æ–½æ³•è€…
+					//åœæ­¢Projectileç§»åŠ¨
+					//ä½¿ç”¨è¿­ä»£å™¨è·å–åœºæ™¯æ‰€æœ‰çš„ARuleOfCharacter
+					//è¿­ä»£ç­›é€‰ï¼Œåˆ¤æ–­å½“å‰ç›®æ ‡æ˜¯å¦å¯ä»¥è½¬ä¸ºARuleOfCharacter
+					//è®¡ç®—è·ç¦»ï¼Œå¦‚æœè·ç¦»å°äº1400å°±å‘å°„
+					//åˆ¤æ–­ç›®æ ‡é˜µè¥ï¼Œå¦‚æœæ˜¯å‹æ–¹å°±ä¸é€ æˆä¼¤å®³
+					//ä¸æ˜¯å°±è§¦å‘çˆ†ç‚¸æ•ˆæœä»¥åŠé€ æˆä¼¤å®³ã€‚
 
 					SphereDamage->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-					//µ÷ÓÃ·¶Î§ÉËº¦º¯Êı¡£
+					//è°ƒç”¨èŒƒå›´ä¼¤å®³å‡½æ•°ã€‚
 					RadialDamage(GetActorLocation(), Cast<ARuleOfTheCharacter>(GetInstigator()));
 
 					/*
 							if (ARuleOfTheCharacter* InstigatorCharacter = Cast<ARuleOfTheCharacter>(GetInstigator()))
 							{
 								ProjectileComponent->StopMovementImmediately();
-								TArray<AActor*>IgnoreActors; //ºöÂÔµÄÄ¿±ê
-								//TArray<ARuleOfTheCharacter*>TargetCharacter;  //µØÍÆÄ¿±ê
+								TArray<AActor*>IgnoreActors; //å¿½ç•¥çš„ç›®æ ‡
+								//TArray<ARuleOfTheCharacter*>TargetCharacter;  //åœ°æ¨ç›®æ ‡
 								for (TActorIterator<ARuleOfTheCharacter> it(GetWorld(),ARuleOfTheCharacter::StaticClass());it; ++it)
 								{
-									if (ARuleOfTheCharacter* TheCharacter = *it)  //ÅĞ¶ÏÄ¿±êÊÇ·ñÄÜ×ª»»³É¶ÔÓ¦µÄCharacter
+									if (ARuleOfTheCharacter* TheCharacter = *it)  //åˆ¤æ–­ç›®æ ‡æ˜¯å¦èƒ½è½¬æ¢æˆå¯¹åº”çš„Character
 									{
-										//ÏëÄ¿±ê¿ª»ğºó£¬ÅĞ¶ÏÉËº¦·¶Î§ÄÚµÄÆäËûÄ¿±êÓëÅÚµ¯×ÔÉíµÄ¾àÀë
+										//æƒ³ç›®æ ‡å¼€ç«åï¼Œåˆ¤æ–­ä¼¤å®³èŒƒå›´å†…çš„å…¶ä»–ç›®æ ‡ä¸ç‚®å¼¹è‡ªèº«çš„è·ç¦»
 										FVector TargetDistance = TheCharacter->GetActorLocation() - InstigatorCharacter->GetActorLocation();
 										if (TargetDistance.Size()<=1400.f)
 										{
@@ -200,7 +202,7 @@ void ARuleOfTheBullet::BeginPlay()
 											}
 											else
 											{
-												//²»ÊÇÒ»¸ö¶ÓµÄ¾Í¹¥»÷¡£
+												//ä¸æ˜¯ä¸€ä¸ªé˜Ÿçš„å°±æ”»å‡»ã€‚
 												UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OpenFireParticle, TheCharacter->GetActorLocation());
 												//TargetCharacter.Add(TheCharacter);
 											}
@@ -208,7 +210,7 @@ void ARuleOfTheBullet::BeginPlay()
 									}
 								}
 
-								//·¶Î§¹¥»÷
+								//èŒƒå›´æ”»å‡»
 								UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), 100.f, 10.f, GetActorLocation(), 400.f, 1000.f, 1.f, UDamageType::StaticClass(), IgnoreActors, InstigatorCharacter);
 
 							}*/
@@ -219,10 +221,10 @@ void ARuleOfTheBullet::BeginPlay()
 					ProjectileComponent->StopMovementImmediately();
 					SphereDamage->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-					//Ñ°ÕÒµ½Ä¿±ê£¬È»ºóÔÚÄ¿±êÉíÉÏ(HomingPoint)Éú³ÉÌØĞ§¡£
+					//å¯»æ‰¾åˆ°ç›®æ ‡ï¼Œç„¶ååœ¨ç›®æ ‡èº«ä¸Š(HomingPoint)ç”Ÿæˆç‰¹æ•ˆã€‚
 					UGameplayStatics::SpawnEmitterAttached(DamageParticle, TargetCharacter->GetHomingPoint());
 
-					//ÉèÖÃTimer£¬È»ºóÀ´½øĞĞ³ÖĞøÉËº¦
+					//è®¾ç½®Timerï¼Œç„¶åæ¥è¿›è¡ŒæŒç»­ä¼¤å®³
 					GetWorld()->GetTimerManager().SetTimer(ChainAttackTimer, this, &ARuleOfTheBullet::CurrentChianAttack, 0.4f,true);
 
 					break;
@@ -233,7 +235,7 @@ void ARuleOfTheBullet::BeginPlay()
 	}
 
 
-	//Æô¶¯ºó°ó¶¨¶ÔÓ¦µÄ¹¦ÄÜº¯Êı½Ó¿Ú
+	//å¯åŠ¨åç»‘å®šå¯¹åº”çš„åŠŸèƒ½å‡½æ•°æ¥å£
 	SphereDamage->OnComponentBeginOverlap.AddUniqueDynamic(this, &ARuleOfTheBullet::BeginOverlap);
 
 }
@@ -255,14 +257,14 @@ void ARuleOfTheBullet::Tick(float DeltaTime)
 					{
 						if (TraceSpline)
 						{
-							//Ê×Ñ¡»ñÈ¡Ê©·¨ÕßºÍÄ¿±êµÄ¾àÀë
-							//»ñÈ¡TickTime
-							//¼ÆËãDistance£¨ĞèÒª¿¼ÂÇËõ·Å±ÈÀı  TickTime/¾àÀë )
-							//»ñÈ¡¶ÔÓ¦¾àÀëµÄlocationºÍrotation ²¢ÉèÖÃ
+							//é¦–é€‰è·å–æ–½æ³•è€…å’Œç›®æ ‡çš„è·ç¦»
+							//è·å–TickTime
+							//è®¡ç®—Distanceï¼ˆéœ€è¦è€ƒè™‘ç¼©æ”¾æ¯”ä¾‹  TickTime/è·ç¦» )
+							//è·å–å¯¹åº”è·ç¦»çš„locationå’Œrotation å¹¶è®¾ç½®
 							FVector DistanceVector = InstigatorCharacter->GetActorLocation() - TargetCharacter->GetActorLocation();
 							CurrentTickTime += DeltaTime;
 
-							//(CurrentTickTime / DistanceVector.Size()) Õâ¸ö¿ØÖÆËÙ¶ÈÊÇ¸ù¾İ³¤¶ÈÀ´½øĞĞ±ÈÀıËõ·ÅÊ±¼ä±£Ö¤ÊÇÔÈËÙ
+							//(CurrentTickTime / DistanceVector.Size()) è¿™ä¸ªæ§åˆ¶é€Ÿåº¦æ˜¯æ ¹æ®é•¿åº¦æ¥è¿›è¡Œæ¯”ä¾‹ç¼©æ”¾æ—¶é—´ä¿è¯æ˜¯åŒ€é€Ÿ
 							float CurrentDistance = TraceSpline->GetSplineLength() * (CurrentTickTime / DistanceVector.Size() * 1000.f);
 
 							FVector CurrentLoc = TraceSpline->GetWorldLocationAtDistanceAlongSpline(CurrentDistance);
@@ -270,10 +272,10 @@ void ARuleOfTheBullet::Tick(float DeltaTime)
 
 							SetActorLocationAndRotation(CurrentLoc, CurrentRot);
 
-							//ÔÚÒ»¶¨·¶Î§ÄÚÊÖ¶¯µ÷ÓÃbeginOverlap
+							//åœ¨ä¸€å®šèŒƒå›´å†…æ‰‹åŠ¨è°ƒç”¨beginOverlap
 							if ((CurrentLoc-TargetCharacter->GetActorLocation()).Size()<=100.f)
 							{
-								//´´½¨HitResilt
+								//åˆ›å»ºHitResilt
 								FHitResult HitResults;
 								HitResults.Location = GetActorLocation();
 								BeginOverlap(nullptr, TargetCharacter, nullptr, 0, false, HitResults);
@@ -284,20 +286,20 @@ void ARuleOfTheBullet::Tick(float DeltaTime)
 					}
 						case EBulletType::BULLET_CHAIN:
 						{
-						//Í¨¹ıTickÀ´³ÖĞø¶ÔÄ¿±ê·¢ÉäÉäÏß
-						//Ê×ÏÈ»¹ÊÇÒª»ñÈ¡µ½Ä¿±ê
-						//Í¨¹ıÄ¿±êÉíÉÏµÄÁ£×ÓÏµÍ³À´¸³ÓèÒ»¸öÉÁµçĞ§¹ûÔÚËûÉíÉÏ
+						//é€šè¿‡Tickæ¥æŒç»­å¯¹ç›®æ ‡å‘å°„å°„çº¿
+						//é¦–å…ˆè¿˜æ˜¯è¦è·å–åˆ°ç›®æ ‡
+						//é€šè¿‡ç›®æ ‡èº«ä¸Šçš„ç²’å­ç³»ç»Ÿæ¥èµ‹äºˆä¸€ä¸ªé—ªç”µæ•ˆæœåœ¨ä»–èº«ä¸Š
 
-						//´´½¨Ò»¸öÊı×éÀ´½ÓËùÓĞµÄ×Ó×é¼ş
+						//åˆ›å»ºä¸€ä¸ªæ•°ç»„æ¥æ¥æ‰€æœ‰çš„å­ç»„ä»¶
 						TArray<USceneComponent*> SceneComponents;
 						RootComponent->GetChildrenComponents(true, SceneComponents);
 
-						//Ê¹ÓÃ×Ô¶¯ËÑË÷ÀàĞÍÑ­»·À´±éÀú
+						//ä½¿ç”¨è‡ªåŠ¨æœç´¢ç±»å‹å¾ªç¯æ¥éå†
 						for (auto& temp : SceneComponents)
 						{
 							if (UParticleSystemComponent* ParticleSystem = Cast<UParticleSystemComponent>(temp))
 							{
-								//ĞèÒªÉèÖÃBeamSourcePointºÍBeamTargetPoint
+								//éœ€è¦è®¾ç½®BeamSourcePointå’ŒBeamTargetPoint
 								ParticleSystem->SetBeamSourcePoint(0, InstigatorCharacter->GetOpenFirePoint()->GetComponentLocation(), 0);
 								ParticleSystem->SetBeamTargetPoint(0, TargetCharacter->GetHomingPoint()->GetComponentLocation(), 0);
 							}
@@ -309,13 +311,13 @@ void ARuleOfTheBullet::Tick(float DeltaTime)
 	
 				if (!TargetCharacter->IsActive())
 				{
-					//Èç¹ûÄ¿±êËÀÍöÁËÒ²Ïú»Ù×Ô¼º
+					//å¦‚æœç›®æ ‡æ­»äº¡äº†ä¹Ÿé”€æ¯è‡ªå·±
 					Destroy();
 				}
 			}
 			else
 			{
-				//Ã»ÓĞÄ¿±ê¾ÍÏú»Ù
+				//æ²¡æœ‰ç›®æ ‡å°±é”€æ¯
 				Destroy();
 			}
 
@@ -325,14 +327,14 @@ void ARuleOfTheBullet::Tick(float DeltaTime)
 
 void ARuleOfTheBullet::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//		×Óµ¯ÉËº¦ÅĞ¶ÏÂß¼­
-	// 		£¨1£© Ê×ÏÈÅĞ¶Ï»ñÈ¡µ½Ê©·¨Õß£¨×Ô¼º£© Instigator£¨Ê©·¨Õß(ÅÚÌ¨»òÕßMonster)£©
-	// 		£¨2£© È»ºó»ñÈ¡µ½OtherActorÊÇ·ñÓĞĞ§£¨µĞÈË£©
-	// 		£¨3£© Ö®ºóÅĞ¶ÏËûÃÇÊÇ²»ÊÇÒ»¸ö¶ÓÎéµÄ
-	// 		£¨4£© Èç¹û²»ÊÇÒ»¸ö¶ÓÎéµÄÄÇÃ´ÒªÅÌµãµ±Ç°OtherActor£¨µĞÈË£©ÊÇ·ñÊÇ»î×ÅµÄ
-	// 		£¨5£© Èç¹ûµĞÈË»òÕß£¬ÄÇÃ´¾ÍÉú³ÉÌØĞ§È»ºóÊ¹ÓÃapply damageÀ´Ôì³ÉÉËº¦¡£
+	//		å­å¼¹ä¼¤å®³åˆ¤æ–­é€»è¾‘
+	// 		ï¼ˆ1ï¼‰ é¦–å…ˆåˆ¤æ–­è·å–åˆ°æ–½æ³•è€…ï¼ˆè‡ªå·±ï¼‰ Instigatorï¼ˆæ–½æ³•è€…(ç‚®å°æˆ–è€…Monster)ï¼‰
+	// 		ï¼ˆ2ï¼‰ ç„¶åè·å–åˆ°OtherActoræ˜¯å¦æœ‰æ•ˆï¼ˆæ•Œäººï¼‰
+	// 		ï¼ˆ3ï¼‰ ä¹‹ååˆ¤æ–­ä»–ä»¬æ˜¯ä¸æ˜¯ä¸€ä¸ªé˜Ÿä¼çš„
+	// 		ï¼ˆ4ï¼‰ å¦‚æœä¸æ˜¯ä¸€ä¸ªé˜Ÿä¼çš„é‚£ä¹ˆè¦ç›˜ç‚¹å½“å‰OtherActorï¼ˆæ•Œäººï¼‰æ˜¯å¦æ˜¯æ´»ç€çš„
+	// 		ï¼ˆ5ï¼‰ å¦‚æœæ•Œäººæˆ–è€…ï¼Œé‚£ä¹ˆå°±ç”Ÿæˆç‰¹æ•ˆç„¶åä½¿ç”¨apply damageæ¥é€ æˆä¼¤å®³ã€‚
 
-		//Õâ¸öInstigatorÊÇ·ÅÔÚPublicÖĞµÄ
+		//è¿™ä¸ªInstigatoræ˜¯æ”¾åœ¨Publicä¸­çš„
 	if (ARuleOfTheCharacter* InstigatorCharecter = Cast<ARuleOfTheCharacter>(GetInstigator()))
 	{
 		if (ARuleOfTheCharacter* OtherCharacter = Cast<ARuleOfTheCharacter>(OtherActor))
@@ -343,15 +345,15 @@ void ARuleOfTheBullet::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 				{
 					if (OtherCharacter->IsActive())
 					{
-						//Éú³ÉÌØĞ§
+						//ç”Ÿæˆç‰¹æ•ˆ
 						UGameplayStatics::SpawnEmitterAtLocation(this, DamageParticle, SweepResult.Location);
 
-						//Ôì³ÉÉËº¦
+						//é€ æˆä¼¤å®³
 						UGameplayStatics::ApplyDamage(OtherActor, 100.f, InstigatorCharecter->GetController(), InstigatorCharecter, UDamageType::StaticClass());
 
 					}
 
-					//Âú×ãÒÔÉÏÌõ¼şµÄ×Óµ¯£¬Åö×²ºó×Ô¶¯Ïú»Ù
+					//æ»¡è¶³ä»¥ä¸Šæ¡ä»¶çš„å­å¼¹ï¼Œç¢°æ’åè‡ªåŠ¨é”€æ¯
 					switch (BulletType)
 					{
 					case EBulletType::BULLET_DIRECT_LINE:
@@ -375,26 +377,25 @@ void ARuleOfTheBullet::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 void ARuleOfTheBullet::RadialDamage(const FVector& Origin, ARuleOfTheCharacter* InstigatorCharacter)
 {
-
-	//Ê×ÏÈ»ñµÃÊ©·¨Õß
-	//Í£Ö¹ProjectileÒÆ¶¯
-	//Ê¹ÓÃµü´úÆ÷»ñÈ¡³¡¾°ËùÓĞµÄARuleOfCharacter
-	//µü´úÉ¸Ñ¡£¬ÅĞ¶Ïµ±Ç°Ä¿±ê¡£
-	//¼ÆËã¾àÀë£¬Èç¹û¾àÀëĞ¡ÓÚ1400¾Í·¢Éä
-	//ÅĞ¶ÏÄ¿±êÕóÓª£¬Èç¹ûÊÇÓÑ·½¾Í²»Ôì³ÉÉËº¦
-	//²»ÊÇ¾Í´¥·¢±¬Õ¨Ğ§¹ûÒÔ¼°Ôì³ÉÉËº¦¡£
-
+	//é¦–å…ˆè·å¾—æ–½æ³•è€…
+	//åœæ­¢Projectileç§»åŠ¨
+	//ä½¿ç”¨è¿­ä»£å™¨è·å–åœºæ™¯æ‰€æœ‰çš„ARuleOfCharacter
+	//è¿­ä»£ç­›é€‰ï¼Œåˆ¤æ–­å½“å‰ç›®æ ‡ã€‚
+	//è®¡ç®—è·ç¦»ï¼Œå¦‚æœè·ç¦»å°äº1400å°±å‘å°„
+	//åˆ¤æ–­ç›®æ ‡é˜µè¥ï¼Œå¦‚æœæ˜¯å‹æ–¹å°±ä¸é€ æˆä¼¤å®³
+	//ä¸æ˜¯å°±è§¦å‘çˆ†ç‚¸æ•ˆæœä»¥åŠé€ æˆä¼¤å®³ã€‚
+	
 	if (InstigatorCharacter)
 	{
 		ProjectileComponent->StopMovementImmediately();
-		TArray<AActor* >IgnoreActors;  //´´½¨ºöÂÔÊı×éActor£¬ÕâÀï·¶Î§¹¥»÷ĞèÒª£¬Ê¹ÓÃµÄ¾ÍAActorµÄÊı×é¡£
-
+		TArray<AActor* >IgnoreActors;  //åˆ›å»ºå¿½ç•¥æ•°ç»„Actorï¼Œè¿™é‡ŒèŒƒå›´æ”»å‡»éœ€è¦ï¼Œä½¿ç”¨çš„å°±AActorçš„æ•°ç»„ã€‚
+	
 		for (TActorIterator<ARuleOfTheCharacter> it(GetWorld(), ARuleOfTheCharacter::StaticClass()); it; ++it)
 		{
 			if (ARuleOfTheCharacter* TargetCharacter = *it)
 			{
-
-				//¼ÆËã×Ô¼ººÍÄ¿±ê¾àÀë
+	
+				//è®¡ç®—è‡ªå·±å’Œç›®æ ‡è·ç¦»
 				FVector TargetDistance = TargetCharacter->GetActorLocation() - InstigatorCharacter->GetActorLocation();
 				if (TargetDistance.Size() <= 1400)
 				{
@@ -407,14 +408,14 @@ void ARuleOfTheBullet::RadialDamage(const FVector& Origin, ARuleOfTheCharacter* 
 						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OpenFireParticle, Origin);
 					}
 				}
-
+	
 			}
 		}
-		//Ôì³É·¶Î§ÉËº¦£¨Ë¥¼õ°æ£©
+		//é€ æˆèŒƒå›´ä¼¤å®³ï¼ˆè¡°å‡ç‰ˆï¼‰
 		UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), 100.f, 10.f, Origin, 400.f, 1000.f, 1.f, UDamageType::StaticClass(), IgnoreActors);
 	}
-
 }
+
 
 void ARuleOfTheBullet::CurrentChianAttack()
 {
@@ -426,18 +427,18 @@ void ARuleOfTheBullet::CurrentChianAttack()
 		return;
 	}
 
-	//¹¥»÷´ÎÊıµİ¼õ
+	//æ”»å‡»æ¬¡æ•°é€’å‡
 	ChainAttackCount--;
 	UKismetSystemLibrary::PrintString(this, UKismetStringLibrary::Conv_IntToString(ChainAttackCount));
 
-	//ÉËº¦¼ÆËã²¿·Ö
+	//ä¼¤å®³è®¡ç®—éƒ¨åˆ†
 	if (ARuleOfTheCharacter* InstigatorCharacter = Cast<ARuleOfTheCharacter>(GetInstigator()))
 	{
 		if (ARuleOfTheAIController* InstigatorControlelr = Cast<ARuleOfTheAIController>(InstigatorCharacter->GetController()))
 		{
 			if (ARuleOfTheCharacter* TargetCharacter = Cast<ARuleOfTheCharacter>(InstigatorControlelr->CurrentTarget.Get()))
 			{
-				//¶ÔÄ¿±êÔì³ÉÉËº¦
+				//å¯¹ç›®æ ‡é€ æˆä¼¤å®³
 				UGameplayStatics::ApplyDamage(TargetCharacter, 100.f, InstigatorCharacter->GetController(), InstigatorCharacter, UDamageType::StaticClass());
 			}
 		}
