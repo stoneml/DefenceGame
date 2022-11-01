@@ -85,19 +85,14 @@ protected:
 	//伤害的数值
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)override;
 
-
-
-
 	//获取GameController
 	//使用转换的方法
 	//FORCEINLINE ATowerDefenceGamePlayerController* GetGamePlayerController() { return GetWorld() ? (Cast<ATowerDefenceGamePlayerController>(GetWorld()->GetFirstPlayerController())): nullptr; }
+	//通过模板方式获取
 	FORCEINLINE ATowerDefenceGamePlayerController* GetGamePlayerController() { return GetWorld() ? GetWorld()->GetFirstPlayerController<ATowerDefenceGamePlayerController>() : nullptr; }
 
 	//获取GameState
 	FORCEINLINE ATowerDefenceGameState* GetGameState() { return GetWorld() ? GetWorld()->GetGameState<ATowerDefenceGameState>() : nullptr; }
-
-
-
 
 
 public:

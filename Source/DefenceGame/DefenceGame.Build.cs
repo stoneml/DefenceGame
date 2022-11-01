@@ -24,7 +24,7 @@ public class DefenceGame : ModuleRules
             "ApexDestruction",
             "AIModule",
             "SimpleDrawText",
-            "RawMesh",  //添加原始模型数据模块
+            "RawMesh",  //娣诲姞鍘熷妯″瀷鏁版嵁妯″潡
            // "GeometryAlgorithms"
         });
 

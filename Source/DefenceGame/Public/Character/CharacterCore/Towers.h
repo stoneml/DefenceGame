@@ -16,15 +16,15 @@ class DEFENCEGAME_API ATowers : public ARuleOfTheCharacter
 
 private:
 	
-	//Á£×ÓËş
+	//ç²’å­å¡”
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BaseAttribute", meta = (AllowPrivateAccess = "true"))
 		class UParticleSystemComponent* ParticleMesh;
 
-	//½¨Öş·¶Î§Ä£ĞÍ
+	//å»ºç­‘èŒƒå›´æ¨¡å‹
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BaseAttribute", meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* StaticMeshBuilding;
 
-	//Ëğ»µÊ±µÄËş
+	//æŸåæ—¶çš„å¡”
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BaseAttribute", meta = (AllowPrivateAccess = "true"))
 		class UDestructibleComponent* DestructibleMeshBuilding;
 
@@ -33,13 +33,13 @@ public:
 
 	ATowers();
 
-	//¼Ì³Ğ¸¸Àà½Ó¿Ú
+	//ç»§æ‰¿çˆ¶ç±»æ¥å£
 	virtual EGameCharacterType::Type GetType();
 
-	//Éè¶¨ËşµÄ¶ÓÎéÎªtrue
+	//è®¾å®šå¡”çš„é˜Ÿä¼ä¸ºtrue
 	virtual bool IsTeam() { return true; }
 
-	//Ìí¼ÓÒ»¸öTowerµÄĞı×ª±äÁ¿£¬Ìá¹©¸øÀ¶Í¼½øĞĞ¶ÁÈ¡
+	//æ·»åŠ ä¸€ä¸ªTowerçš„æ—‹è½¬å˜é‡ï¼Œæä¾›ç»™è“å›¾è¿›è¡Œè¯»å–
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BaseAttribute");
 	FRotator TowerRotaotor;
 
@@ -47,6 +47,7 @@ public:
 
 protected:
 
+	//è·å–ä¼¤å®³
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 

@@ -4,6 +4,7 @@
 #include "Character/CharacterCore/Towers.h"
 #include <Particles/ParticleSystemComponent.h>
 #include <Components/StaticMeshComponent.h>
+#include "DestructibleComponent.h"
 //#include "../Plugins/Runtime/ApexDestruction/Source/ApexDestruction/Public/DestructibleComponent.h"
 
 ATowers::ATowers()
@@ -11,12 +12,14 @@ ATowers::ATowers()
 
 	ParticleMesh = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleMesh"));
 	StaticMeshBuilding = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RangeBuilding"));
-	//DestructibleMeshBuilding = CreateDefaultSubobject<UDestructibleComponent>(TEXT("Substitute"));
 
-	//使用::的时候不需要函数带()
+	//闇�瑕佸寘鍚牬纰庣殑妯″潡"ApexDestruction"
+	DestructibleMeshBuilding = CreateDefaultSubobject<UDestructibleComponent>(TEXT("Substitute"));
+
+	//浣跨敤::鐨勬椂鍊欎笉闇�瑕佸嚱鏁板甫()
 	ParticleMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	StaticMeshBuilding->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-	//DestructibleMeshBuilding->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	DestructibleMeshBuilding->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 }
 

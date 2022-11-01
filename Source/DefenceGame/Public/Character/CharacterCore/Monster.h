@@ -20,10 +20,10 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime)override;
 
-	//MonsterµÄ¶ÓÎéÊÇfalse
+	//Monsterçš„é˜Ÿä¼æ˜¯false
 	virtual bool IsTeam() { return Super::IsTeam(); }
 
-	//¼Ì³Ğ¸¸ÀàµÄº¯Êı
+	//ç»§æ‰¿çˆ¶ç±»çš„å‡½æ•°
 	virtual EGameCharacterType::Type GetType();
 
 };

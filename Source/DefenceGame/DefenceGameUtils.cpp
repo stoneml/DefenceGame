@@ -62,7 +62,7 @@ float Expression::CalcDamage(IRuleCharacter* Enemy, IRuleCharacter* Owner)
 	//攻击伤害 / （（护甲/100）+ 1）
 	if (Enemy&&Owner)
 	{
-		return Enemy->GetCharacterData().PhysicalAttack / ((Owner->GetCharacterData().Armor / 10) + 1);
+		return Enemy->GetCharacterData().PhysicalAttack / ((Owner->GetCharacterData().Armor / 100) + 1);
 	}
 	return 0.f;
 }

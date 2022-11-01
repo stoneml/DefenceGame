@@ -30,19 +30,23 @@ ARuleOfTheCharacter::ARuleOfTheCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//´´½¨¶ÔÓ¦µÄComponent
+	//åˆ›å»ºå¯¹åº”çš„Component
 	HomingPoint = CreateDefaultSubobject<USceneComponent>(TEXT("HomingPoint"));
 	Widget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Widget"));
 	OpenFirePoint = CreateDefaultSubobject<UArrowComponent>(TEXT("SpawnPoint"));
 	TraceShowCharacterInfomation = CreateDefaultSubobject<UBoxComponent>(TEXT("TraceBox"));
 
-	//½«×é¼ş°ó¶¨µ½¸ù×é¼şÉÏ
+	//å°†ç»„ä»¶ç»‘å®šåˆ°æ ¹ç»„ä»¶ä¸Š
 	HomingPoint->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	Widget->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	OpenFirePoint->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	TraceShowCharacterInfomation->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 
+	//è®¾ç½®é¢„è®¾Scanning
+	TraceShowCharacterInfomation->SetCollisionProfileName("Scanning");
+	//è®¾ç½®æ£€æµ‹ç›’å¤§å°
+	TraceShowCharacterInfomation->SetBoxExtent(FVector(38,38,100));
 
 }
 
@@ -52,13 +56,13 @@ void ARuleOfTheCharacter::BeginPlay()
 	Super::BeginPlay();
 
 
-	//Èç¹ûÃ»ÓĞcontroller¾ÍÌí¼ÓÒ»¸öÄ¬ÈÏµÄ
+	//å¦‚æœæ²¡æœ‰controllerå°±æ·»åŠ ä¸€ä¸ªé»˜è®¤çš„
 	if (!GetController())
 	{
 		SpawnDefaultController();
 	}
 
-	//BeginPlayÊ±ºòË¢ĞÂÒ»´ÎÑªÁ¿
+	//BeginPlayæ—¶å€™åˆ·æ–°ä¸€æ¬¡è¡€é‡
 	UpdateUI();
 
 }
@@ -75,7 +79,7 @@ void ARuleOfTheCharacter::Tick(float DeltaTime)
 
 UStaticMesh* ARuleOfTheCharacter::GetDollMesh()
 {
-	//´Óµ±Ç°CharacterµÄ×ÓÀà×é½¨ÖĞ½øĞĞ²éÕÒ
+	//ä»å½“å‰Characterçš„å­ç±»ç»„å»ºä¸­è¿›è¡ŒæŸ¥æ‰¾
 	TArray<USceneComponent*> SceneComponents;
 	RootComponent->GetChildrenComponents(true, SceneComponents);
 
@@ -90,18 +94,18 @@ UStaticMesh* ARuleOfTheCharacter::GetDollMesh()
 		}
 		else if (UParticleSystemComponent* ParticleComp = Cast<UParticleSystemComponent>(Tmp))
 		{
-			//ÅĞ¶Ï×é¼şÖĞµÄParticleSystemÊÇ·ñÎªÕæ£¬²¢ÇÒEmitterÊıÁ¿´óÓÚ0
+			//åˆ¤æ–­ç»„ä»¶ä¸­çš„ParticleSystemæ˜¯å¦ä¸ºçœŸï¼Œå¹¶ä¸”Emitteræ•°é‡å¤§äº0
 			if (ParticleComp->Template && ParticleComp->Template->Emitters.Num() > 0)
 			{
 				for (const UParticleEmitter* TmpEmitter : ParticleComp->Template->Emitters)
 				{
-					//Èç¹ûËûµÄLOD 0 ÊÇ±»¼¤»îµÄ
+					//å¦‚æœä»–çš„LOD 0 æ˜¯è¢«æ¿€æ´»çš„
 					if (TmpEmitter->LODLevels[0]->bEnabled)
 					{
-						//Ñ°ÕÒTypeMesh£¬È»ºó»ñÈ¡Mesh
+						//å¯»æ‰¾TypeMeshï¼Œç„¶åè·å–Mesh
 						if (UParticleModuleTypeDataMesh* MyParticleDataMesh = Cast<UParticleModuleTypeDataMesh>(TmpEmitter->LODLevels[0]->TypeDataModule))
 						{
-							//×îºó·µ»ØDataMeshÄ£¿éÖĞµÄMesh
+							//æœ€åè¿”å›DataMeshæ¨¡å—ä¸­çš„Mesh
 							if (MyParticleDataMesh->Mesh)
 							{
 								return MyParticleDataMesh->Mesh;
@@ -114,19 +118,19 @@ UStaticMesh* ARuleOfTheCharacter::GetDollMesh()
 		}
 		else if (USkeletalMeshComponent* NewSkeletalMeshComponent = Cast<USkeletalMeshComponent>(Tmp))
 		{
-			//½«¹Ç÷À×é¼şµÄtransformÉèÖÃÎªµ¥Î»»¯µÄ £¨ÊÀ½çµÄºÍÏà¶ÔµÄ¶¼ÒªÉèÖÃ£©
+			//å°†éª¨éª¼ç»„ä»¶çš„transformè®¾ç½®ä¸ºå•ä½åŒ–çš„ ï¼ˆä¸–ç•Œçš„å’Œç›¸å¯¹çš„éƒ½è¦è®¾ç½®ï¼‰
 			// FTransform MeshTransform = NewSkeletalMeshComponent->GetComponentTransform();
-			//NewSkeletalMeshComponent->SetRelativeTransform(FTransform::Identity);  //ÎÒµÄÊÇÕı³£µÄ
-			//NewSkeletalMeshComponent->SetWorldTransform(FTransform::Identity);  //ÎÒµÄÊÇÕı³£µÄ
+			//NewSkeletalMeshComponent->SetRelativeTransform(FTransform::Identity);  //æˆ‘çš„æ˜¯æ­£å¸¸çš„
+			//NewSkeletalMeshComponent->SetWorldTransform(FTransform::Identity);  //æˆ‘çš„æ˜¯æ­£å¸¸çš„
 			
-			//ÉèÖÃÄ£ĞÍµÄÏà¶ÔĞı×ª
-			//(ÕâÀïµÄĞı×ªÊÇĞèÒª´«µİÒ»¸öËÄÔª£¬ËùÒÔÒª½øĞĞ×ª»»)
+			//è®¾ç½®æ¨¡å‹çš„ç›¸å¯¹æ—‹è½¬
+			//(è¿™é‡Œçš„æ—‹è½¬æ˜¯éœ€è¦ä¼ é€’ä¸€ä¸ªå››å…ƒï¼Œæ‰€ä»¥è¦è¿›è¡Œè½¬æ¢)
 			NewSkeletalMeshComponent->SetRelativeRotation(NewSkeletalMeshComponent->GetComponentTransform().GetRotation());
 
-			//´«Èëµ±Ç°µÄ¹Ç÷ÀÄ£ĞÍ£¬Í¨¹ıNameSpace£¬»ù±¾ÉÏ¿ÉÒÔµÈÓÚÊÇ¾²Ì¬º¯Êı¡£
+			//ä¼ å…¥å½“å‰çš„éª¨éª¼æ¨¡å‹ï¼Œé€šè¿‡NameSpaceï¼ŒåŸºæœ¬ä¸Šå¯ä»¥ç­‰äºæ˜¯é™æ€å‡½æ•°ã€‚
 			if (UStaticMesh* NewStaticMesh =  MeshUtils::SkeletalCompToStaticMesh(GetWorld(),NewSkeletalMeshComponent))
 			{
-				//Õâ²¿·ÖÊÇÍ¨¹ıSkelatalMeshÀ´½øĞĞ»ñÈ¡¡£
+				//è¿™éƒ¨åˆ†æ˜¯é€šè¿‡SkelatalMeshæ¥è¿›è¡Œè·å–ã€‚
 				FTransform MeshTransform = NewSkeletalMeshComponent->GetComponentTransform();
 				return NewStaticMesh;
 			}
@@ -143,14 +147,14 @@ UStaticMesh* ARuleOfTheCharacter::GetDollMesh()
 
 void ARuleOfTheCharacter::UpdateUI()
 {
-	//Ê×ÏÈÅĞ¶¨µ±Ç°UIÊÇ·ñÓĞĞ§
+	//é¦–å…ˆåˆ¤å®šå½“å‰UIæ˜¯å¦æœ‰æ•ˆ
 	if (Widget)
 	{
-		//½«UI×ª»»ÎªHealthUI
+		//å°†UIè½¬æ¢ä¸ºHealthUI
 		if (UUI_Health* HealthUI = Cast<UUI_Health>(Widget->GetUserWidgetObject()))
 		{
 			HealthUI->SetTitle((GetCharacterData().Name).ToString());
-			HealthUI->SetHealth(GetHealth() / GetMaxHealth());   //ÑªÁ¿ÊÇĞèÒª»ñÈ¡°Ù·Ö±È	
+			HealthUI->SetHealth(GetHealth() / GetMaxHealth());   //è¡€é‡æ˜¯éœ€è¦è·å–ç™¾åˆ†æ¯”	
 		}
 	}
 }
@@ -164,22 +168,22 @@ float ARuleOfTheCharacter::TakeDamage(float Damage, struct FDamageEvent const& D
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-	//Í¨¹ıDamage»ñÈ¡µ½µ±Ç°ÊÜµ½µÄÉËº¦
+	//é€šè¿‡Damageè·å–åˆ°å½“å‰å—åˆ°çš„ä¼¤å®³
 	float DamageVal = Expression::CalcDamage(Cast<ARuleOfTheCharacter>(DamageCauser), this);
 	//GetCharacterData().Health -= (DamageVal / 10.f);
 	GetCharacterData().Health -= DamageVal;
 
 	//UKismetSystemLibrary::PrintString(this, TEXT("HP: ") + FString::SanitizeFloat(DamageVal));
-	//Èç¹û×ÔÉíËÀÍö£¬¾ÍÊ¼ÖÕ±£³ÖÑªÁ¿Îª0
+	//å¦‚æœè‡ªèº«æ­»äº¡ï¼Œå°±å§‹ç»ˆä¿æŒè¡€é‡ä¸º0
 	if (!IsActive())
 	{
 		GetCharacterData().Health = 0.f;
 	}
 
-	//Ã¿´ÎÊÜÉËÊ±Éú³ÉÒ»¸öDrawText
+	//æ¯æ¬¡å—ä¼¤æ—¶ç”Ÿæˆä¸€ä¸ªDrawText
 	if (DrawTextClass)
 	{
-		//´«µİµÄÊÇĞèÒªspawnµÄÀà
+		//ä¼ é€’çš„æ˜¯éœ€è¦spawnçš„ç±»
 		if (ADrawText* MyValueText = GetWorld()->SpawnActor<ADrawText>(DrawTextClass,GetActorLocation(),FRotator::ZeroRotator))
 		{
 			FString DmgText = FString::Printf(TEXT("-%0.f"), DamageVal);
@@ -187,7 +191,7 @@ float ARuleOfTheCharacter::TakeDamage(float Damage, struct FDamageEvent const& D
 		}
 	}
 
-	//ÊÜÉËÖ®ºó¸üĞÂUI
+	//å—ä¼¤ä¹‹åæ›´æ–°UI
 	UpdateUI();
 
 	return DamageVal;
@@ -201,7 +205,7 @@ bool ARuleOfTheCharacter::IsDeath()
 
 float ARuleOfTheCharacter::GetHealth()
 {
-	//×öÒ»´ÎÓĞĞ§ĞÔÅĞ¶Ï
+	//åšä¸€æ¬¡æœ‰æ•ˆæ€§åˆ¤æ–­
 	if (GetGameState())
 	{
 /*
@@ -241,7 +245,7 @@ FCharacterData& ARuleOfTheCharacter::GetCharacterData()
 		TargetCharacterData = GetGameState()->GetCharacterData(CurrentGUID);
 	}
 
-	//µ÷ÓÃÔÚGameStateÖĞµÄ extern CharacterDataNull£¬Õâ¸öÏàµ±ÓÚstaticµ÷ÓÃ¡£
+	//è°ƒç”¨åœ¨GameStateä¸­çš„ extern CharacterDataNullï¼Œè¿™ä¸ªç›¸å½“äºstaticè°ƒç”¨ã€‚
 	//return CharacterDataNULL;
 	return TargetCharacterData;
 }
