@@ -18,37 +18,37 @@ AActor* AMonsterAIController::FindTarget()
 		TArray<ARuleOfTheCharacter*>TargetNorTowerArray;
 
 		/*
-			//±í´ïÊ½×ÔĞĞÍÆµ¼²¶»ñ£ºµ±²¶»ñÁĞ±í[capture list]ÖĞ²»´«ÈëÈÎºÎ±äÁ¿¶øÊÇĞ´³É[=]»òÕß[&]
-			//lambda±í´ïÊ½»áÒÔÖµ´«µİ[=]»ò[&]ÒıÓÃ´«µİµÄ·½Ê½²¶»ñ²ÎÊı£¬²ÎÊıµÄ²¶»ñ¸ù¾İ±í´ïÊ½ÖĞ±äÁ¿Ê¹ÓÃÇé¿öÀ´ÍÆµ¼¡£
+			//è¡¨è¾¾å¼è‡ªè¡Œæ¨å¯¼æ•è·ï¼šå½“æ•è·åˆ—è¡¨[capture list]ä¸­ä¸ä¼ å…¥ä»»ä½•å˜é‡è€Œæ˜¯å†™æˆ[=]æˆ–è€…[&]
+			//lambdaè¡¨è¾¾å¼ä¼šä»¥å€¼ä¼ é€’[=]æˆ–[&]å¼•ç”¨ä¼ é€’çš„æ–¹å¼æ•è·å‚æ•°ï¼Œå‚æ•°çš„æ•è·æ ¹æ®è¡¨è¾¾å¼ä¸­å˜é‡ä½¿ç”¨æƒ…å†µæ¥æ¨å¯¼ã€‚
 
-			//lambda±í´ïÊ½
-			//ÕâÀïÉè¶¨Ò»¸ö±äÁ¿£¬µ«ÊÇÀàĞÍÊÇ¸ù¾İ»ñÈ¡µ½µÄÀàĞÍ×Ô¶¯Ê¶±ğ
-			//lambda±í´ïÊ½·µ»ØÖµ¸³Öµ   [&]ÒıÓÃ´«µİ	      £¬´«ÈëµÄÖµ,	 --> ·µ»ØÀàĞÍ
+			//lambdaè¡¨è¾¾å¼
+			//è¿™é‡Œè®¾å®šä¸€ä¸ªå˜é‡ï¼Œä½†æ˜¯ç±»å‹æ˜¯æ ¹æ®è·å–åˆ°çš„ç±»å‹è‡ªåŠ¨è¯†åˆ«
+			//lambdaè¡¨è¾¾å¼è¿”å›å€¼èµ‹å€¼   [&]å¼•ç”¨ä¼ é€’	      ï¼Œä¼ å…¥çš„å€¼,	 --> è¿”å›ç±»å‹
 			auto GetRecentlyTowers = [&](const TArray<ATowers*>&MyTowers)->ATowers*
 			{
-				//lambda±í´ïÊ½º¯ÊıÌå
+				//lambdaè¡¨è¾¾å¼å‡½æ•°ä½“
 				if (MyTowers.Num())
 				{
-					float TowerTargetDistance = 99999999.f; //³õÊ¼¸ø¸öºÜ´óµÄÖµ
-					int32 TowerIndex = INDEX_NONE;  //±£´æ×î½ü¾àÀëµÄËşID
-					FVector MyLocation = GetPawn()->GetActorLocation(); //MonsterµÄÎ»ÖÃ
+					float TowerTargetDistance = 99999999.f; //åˆå§‹ç»™ä¸ªå¾ˆå¤§çš„å€¼
+					int32 TowerIndex = INDEX_NONE;  //ä¿å­˜æœ€è¿‘è·ç¦»çš„å¡”ID
+					FVector MyLocation = GetPawn()->GetActorLocation(); //Monsterçš„ä½ç½®
 
-					//¿ªÊ¼½øĞĞ×î½ü¾àÀëµÄ±éÀú
+					//å¼€å§‹è¿›è¡Œæœ€è¿‘è·ç¦»çš„éå†
 					for (int32 i = 0;i<MyTowers.Num();i++)
 					{
-						//Èç¹ûËşÓĞĞ§
+						//å¦‚æœå¡”æœ‰æ•ˆ
 						if (ATowers* TowerCharacter = MyTowers[i])
 						{
-							//Ê×ÏÈ¼ÆËã¾àÀë
+							//é¦–å…ˆè®¡ç®—è·ç¦»
 							FVector TowerLocation = TowerCharacter->GetActorLocation();
 							FVector TmpVector = TowerLocation - MyLocation;
 
-							//ÊÇ·ñĞèÒª½øĞĞabs¾ø¶ÔÖµµÄ×ª»»
-							float TowerAndMonsterDistance = TmpVector.Size();  //Ïàµ±ÓÚÀ¶Í¼µÄ vectorlength
+							//æ˜¯å¦éœ€è¦è¿›è¡Œabsç»å¯¹å€¼çš„è½¬æ¢
+							float TowerAndMonsterDistance = TmpVector.Size();  //ç›¸å½“äºè“å›¾çš„ vectorlength
 
 							if (TowerAndMonsterDistance<TowerTargetDistance)
 							{
-								//Âú×ãÌõ¼ş¾Í±£´æÒ»´Îµ±Ç°×î½ü¾àÀëµÄTowerIDºÍ¾àÀë
+								//æ»¡è¶³æ¡ä»¶å°±ä¿å­˜ä¸€æ¬¡å½“å‰æœ€è¿‘è·ç¦»çš„TowerIDå’Œè·ç¦»
 								TowerIndex = i;
 								TowerTargetDistance = TowerAndMonsterDistance;
 							}
@@ -60,8 +60,8 @@ AActor* AMonsterAIController::FindTarget()
 						}
 					}
 				}
-				return NULL;  //Èç¹ûÃ»ÓĞ·µ»Ø¶«Î÷¾Í·µ»Ø¿Õ
-			};  //lambda ±í´ïÊ½½áÊø*/
+				return NULL;  //å¦‚æœæ²¡æœ‰è¿”å›ä¸œè¥¿å°±è¿”å›ç©º
+			};  //lambda è¡¨è¾¾å¼ç»“æŸ*/
 
 			// 	explicit TActorIterator(UWorld* InWorld, TSubclassOf<ActorType> InClass = ActorType::StaticClass(), EActorIteratorFlags InFlags = EActorIteratorFlags::OnlyActiveLevels | EActorIteratorFlags::SkipPendingKill)
 			// 		: Super(InWorld, InClass, InFlags)
@@ -69,11 +69,14 @@ AActor* AMonsterAIController::FindTarget()
 			// 		++(*this);
 			// 	}
 
-				//Ê¹ÓÃÁËActorµÄµü´úÆ÷£¬ĞèÒªÒıÈëÍ·ÎÄ¼ş
+			//å› ä¸ºæ˜¯åœ¨Contolleré‡Œï¼Œæ‰€ä»¥å¯ä»¥ç›´æ¥ä½¿ç”¨controllerå¯¹åº”çš„pawn
+			//GetPawn()->GetActorLocation(); 
+			// 
+				//ä½¿ç”¨äº†Actorçš„è¿­ä»£å™¨ï¼Œéœ€è¦å¼•å…¥å¤´æ–‡ä»¶
 		for (TActorIterator<ATowers>it(GetWorld(), ATowers::StaticClass()); it; ++it)
 		{
 			ATowers* TheCharacter = *it;
-			if (TheCharacter && TheCharacter->IsActive())  //Èç¹ûËşÓĞĞ§ÇÒ»¹»î×Å
+			if (TheCharacter && TheCharacter->IsActive())  //å¦‚æœå¡”æœ‰æ•ˆä¸”è¿˜æ´»ç€
 			{
 				if (TheCharacter->GetType() == EGameCharacterType::Type::MAIN_TOWER)
 				{
@@ -87,31 +90,31 @@ AActor* AMonsterAIController::FindTarget()
 		}
 
 
-		//È»ºóÊ¹ÓÃlambda»ñÈ¡µ½×î½üµÄMainTowerºÍNorTower
+		//ç„¶åä½¿ç”¨lambdaè·å–åˆ°æœ€è¿‘çš„MainTowerå’ŒNorTower
 		//ATowers* MainTower = GetRecentlyTowers(TargetMainTowerArray);
 		//ATowers* NorTower = GetRecentlyTowers(TargetNorTowerArray);
 
-		//»ñÈ¡µ½µÄÄ¿±êÊÇARuleOfTheCharacter
-		//ÒòÎªÕâ¸öDefenceGameUtilsÀàÊ¹ÓÃµÄÊÇNamespace£¬ËùÒÔÖ±½Ó¾Í¿ÉÒÔÓÃ::À´»ñÈ¡
+		//è·å–åˆ°çš„ç›®æ ‡æ˜¯ARuleOfTheCharacter
+		//å› ä¸ºè¿™ä¸ªDefenceGameUtilsç±»ä½¿ç”¨çš„æ˜¯Namespaceï¼Œæ‰€ä»¥ç›´æ¥å°±å¯ä»¥ç”¨::æ¥è·å–
 		ATowers* MainTower = Cast<ATowers>(DefenceGameUtils::FindTargetRecently(TargetMainTowerArray, GetPawn()->GetActorLocation()));
 		ATowers* NorTower = Cast<ATowers>(DefenceGameUtils::FindTargetRecently(TargetNorTowerArray, GetPawn()->GetActorLocation()));
 
-		//ÓĞÖ÷Ëş¾ÍÏÈ·µ»ØÖ÷Ëş
+		//æœ‰ä¸»å¡”å°±å…ˆè¿”å›ä¸»å¡”
 		if (MainTower)
 		{
 			return MainTower;
 		}
 
-		//·µ»ØÕÒµ½µÄÄ¿±ê
+		//è¿”å›æ‰¾åˆ°çš„ç›®æ ‡
 		return NorTower;
 	}
 
-	//Èç¹û²»²éÕÒĞÂÄ¿±ê£¬¾Í·µ»Øµ±Ç°Ä¿±ê
+	//å¦‚æœä¸æŸ¥æ‰¾æ–°ç›®æ ‡ï¼Œå°±è¿”å›å½“å‰ç›®æ ‡
 	return CurrentTarget.Get();
 
 }
 
 void AMonsterAIController::AttackTarget(ARuleOfTheCharacter* Target)
 {
-
+	
 }

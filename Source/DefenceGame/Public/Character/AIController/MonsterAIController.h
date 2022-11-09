@@ -14,13 +14,12 @@ class DEFENCEGAME_API AMonsterAIController : public ARuleOfTheAIController
 {
 	GENERATED_BODY()
 	
-
 public:
 
-	//¼Ì³Ð¸¸ÀàµÄÕÒµ½Ä¿±ê
+	//ç»§æ‰¿çˆ¶ç±»çš„æ‰¾åˆ°ç›®æ ‡
 	virtual AActor* FindTarget()override;
 
-	//¹¥»÷º¯Êý
+	//æ”»å‡»å‡½æ•°
 	virtual void AttackTarget(ARuleOfTheCharacter* Target)override;
 
 };

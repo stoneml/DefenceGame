@@ -22,32 +22,32 @@ void ATowerAIController::Tick(float DeltaTime)
 	HeartbeatDiagnosis += DeltaTime;
 	if (HeartbeatDiagnosis>=0.5f)
 	{
-		//Ö´ĞĞÒ»´ÎÕÒÈË
+		//æ‰§è¡Œä¸€æ¬¡æ‰¾äºº
 		BTService_FindTarget();
 		HeartbeatDiagnosis = 0.0f;
 	}
 
 	if (TarryMonster.Num()>0)
 	{
-		//Í¨¹ıGetPawnÀ´»ñÈ¡µ½×Ô¼º¡£
+		//é€šè¿‡GetPawnæ¥è·å–åˆ°è‡ªå·±ã€‚
 		if (ATowers* Tower = GetPawn<ATowers>())
 		{
-			//µ±Ä¿±êÎŞĞ§»òÕßÄ¿±êËÀÍöºó£¬¾Í¿ªÊ¼³ÔËÑË÷Ä¿±ê
+			//å½“ç›®æ ‡æ— æ•ˆæˆ–è€…ç›®æ ‡æ­»äº¡åï¼Œå°±å¼€å§‹åƒæœç´¢ç›®æ ‡
 			if (!CurrentTarget.IsValid()||!CurrentTarget->IsActive())
 			{
-				//Èç¹ûÄ¿±êÎŞĞ§£¬ÄÇÃ´¾Í¿ªÊ¼ËÑË÷Ä¿±ê
+				//å¦‚æœç›®æ ‡æ— æ•ˆï¼Œé‚£ä¹ˆå°±å¼€å§‹æœç´¢ç›®æ ‡
 				CurrentTarget = Cast<ARuleOfTheCharacter>(FindTarget());
 			}
 
-			//ÒòÎªTarget»á±»´«¿Õ£¬ËùÒÔÕâÀïÒª½øĞĞÒ»´ÎÓĞĞ§ĞÔÅĞ¶Ï
+			//å› ä¸ºTargetä¼šè¢«ä¼ ç©ºï¼Œæ‰€ä»¥è¿™é‡Œè¦è¿›è¡Œä¸€æ¬¡æœ‰æ•ˆæ€§åˆ¤æ–­
 			if (CurrentTarget.IsValid())
 			{
-				//Ê¹ÓÃUEµÄĞı×ª¾ØÕó£¬»ñµÃµ±Ç°µÄĞı×ªÖµ(Í¨¹ı·½ÏòÏòÁ¿À´½øĞĞ×ª»»£©
+				//ä½¿ç”¨UEçš„æ—‹è½¬çŸ©é˜µï¼Œè·å¾—å½“å‰çš„æ—‹è½¬å€¼(é€šè¿‡æ–¹å‘å‘é‡æ¥è¿›è¡Œè½¬æ¢ï¼‰
 				Tower->TowerRotaotor =FRotationMatrix::MakeFromX(CurrentTarget->GetActorLocation() - GetPawn()->GetActorLocation()).Rotator();
 
-				Tower->bAttack = true;  //Èç¹ûÄ¿±êÎªÕæ¾Í½øĞĞ¹¥»÷¡£
+				Tower->bAttack = true;  //å¦‚æœç›®æ ‡ä¸ºçœŸå°±è¿›è¡Œæ”»å‡»ã€‚
 
-				//ÄÃµ½ËşĞı×ªµÄÎ»ÖÃ
+				//æ‹¿åˆ°å¡”æ—‹è½¬çš„ä½ç½®
 				if (GetPawn()->GetActorRotation()!=FRotator::ZeroRotator)
 				{
 					Tower->TowerRotaotor -= GetPawn()->GetActorRotation();
@@ -62,7 +62,7 @@ AActor* ATowerAIController::FindTarget()
 {
 	if (TarryMonster.Num()>0)
 	{
-		//½øĞĞÎ»ÖÃÅĞ¶Ï
+		//è¿›è¡Œä½ç½®åˆ¤æ–­
 		return DefenceGameUtils::FindTargetRecently(TarryMonster, GetPawn()->GetActorLocation());
 	}
 
@@ -70,26 +70,24 @@ AActor* ATowerAIController::FindTarget()
 }
 
 
-
-
 void ATowerAIController::BTService_FindTarget()
 {
-	//Ã¿´Î²éÕÒÏÈÇå¿Õµ±Ç°²éÑ¯Êı×é
+	//æ¯æ¬¡æŸ¥æ‰¾å…ˆæ¸…ç©ºå½“å‰æŸ¥è¯¢æ•°ç»„
 	TarryMonster.Empty();
 
 	if (ATowers*Tower = GetPawn<ATowers>())
 	{
-		//Èç¹ûÎÒ×Ô¼º»î×Å
+		//å¦‚æœæˆ‘è‡ªå·±æ´»ç€
 		if (Tower->IsActive())
 		{
-			//Ê¹ÓÃActorµü´úÆ÷À´½øĞĞÄ¿±ê²éÕÒ
+			//ä½¿ç”¨Actorè¿­ä»£å™¨æ¥è¿›è¡Œç›®æ ‡æŸ¥æ‰¾
 			for (TActorIterator<AMonster> It(GetWorld(), AMonster::StaticClass()); It; ++It)
 			{
 				if (AMonster* TheCharacter = *It)
 				{
 					if (TheCharacter->IsActive())
 					{
-						//Ä¿±êµÄÎ»ÖÃºÍ×Ô¼º½øĞĞÒ»¸ö»»Ëã
+						//ç›®æ ‡çš„ä½ç½®å’Œè‡ªå·±è¿›è¡Œä¸€ä¸ªæ¢ç®—
 						FVector TDistace = TheCharacter->GetActorLocation() - GetPawn()->GetActorLocation();
 						if (TDistace.Size() <= 1600)
 						{
@@ -99,8 +97,8 @@ void ATowerAIController::BTService_FindTarget()
 				}
 			}
 
-			//ÓĞÄ¿±êÇÒÎÒ»î×Å¾Í¿ªÊ¼½øĞĞ¹¥»÷
-			//ÈõÖ¸Õë×ª»»
+			//æœ‰ç›®æ ‡ä¸”æˆ‘æ´»ç€å°±å¼€å§‹è¿›è¡Œæ”»å‡»
+			//å¼±æŒ‡é’ˆè½¬æ¢
 			AttackTarget(CurrentTarget.Get());
 		}
 	}
@@ -109,7 +107,7 @@ void ATowerAIController::BTService_FindTarget()
 
 void ATowerAIController::AttackTarget(ARuleOfTheCharacter* Target)
 {
-	//»ñÈ¡TowerÀàĞÍµÄPawn£¨ËùÓĞÕß£©
+	//è·å–Towerç±»å‹çš„Pawnï¼ˆæ‰€æœ‰è€…ï¼‰
 	if (ATowers* Tower = GetPawn<ATowers>())
 	{
 		if (TarryMonster.Num() > 0)

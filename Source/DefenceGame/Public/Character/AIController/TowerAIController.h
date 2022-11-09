@@ -25,32 +25,28 @@ public:
 	//Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//¼Ì³Ğ¸¸ÀàµÄÕÒµ½Ä¿±ê
+	//ç»§æ‰¿çˆ¶ç±»çš„æ‰¾åˆ°ç›®æ ‡
 	virtual AActor* FindTarget() override;
 
-	//¼Ì³Ğ¹¥»÷º¯Êı
+	//ç»§æ‰¿æ”»å‡»å‡½æ•°
 	virtual void AttackTarget(ARuleOfTheCharacter* Target) override;
 
 protected:
 
-	//Ä£ÄâÒ»¸öService
+	//æ¨¡æ‹Ÿä¸€ä¸ªService
 	void BTService_FindTarget();
-
-
 
 protected:
 
-	//ÕâÀïÊÇ¹ÖÎï
+	//è¿™é‡Œæ˜¯æ€ªç‰©
 	UPROPERTY()
 		TArray<ARuleOfTheCharacter*> TarryMonster;
 
-	//Õâ¸öTargetÄ¿±êÔİÊ±È¡Ïû£¬ÓÉRuleOfAIControllerÖĞµÄTargetÌæ´ú¡£
-	//»ñÈ¡µ±Ç°Ä¿±ê(ÎªÁËĞı×ª¶øÉèÖÃ£©
+	//è¿™ä¸ªTargetç›®æ ‡æš‚æ—¶å–æ¶ˆï¼Œç”±RuleOfAIControllerä¸­çš„Targetæ›¿ä»£ã€‚
+	//è·å–å½“å‰ç›®æ ‡(ä¸ºäº†æ—‹è½¬è€Œè®¾ç½®ï¼‰
 	//TWeakObjectPtr<ARuleOfTheCharacter> CurrentTarget;
 
-	//ÓÃÀ´×÷ÎªĞÄÌøµÄ¼ä¸ô
+	//ç”¨æ¥ä½œä¸ºå¿ƒè·³çš„é—´éš”
 	float HeartbeatDiagnosis;
-
-
 	
 };

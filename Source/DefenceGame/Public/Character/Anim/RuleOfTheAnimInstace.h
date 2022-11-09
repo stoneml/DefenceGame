@@ -19,17 +19,17 @@ public:
 
 	URuleOfTheAnimInstace();
 
-	//¸²Ğ´AnimInstanceÖĞµÄº¯Êı
-
+	//è¦†å†™AnimInstanceä¸­çš„å‡½æ•°
+	//ç±»ä¼¼beginPlay
 	virtual void NativeInitializeAnimation();
 
-	//Õâ¸öÀàËÆtick
+	//è¿™ä¸ªç±»ä¼¼tick
 	virtual void NativeUpdateAnimation(float DeltaSeconds);
 
 
 public:
 
-	//ÕâÀïµÄÖµÊÇ´«µİ¸ø¶¯»­À¶Í¼Ê¹ÓÃµÄ
+	//è¿™é‡Œçš„å€¼æ˜¯ä¼ é€’ç»™åŠ¨ç”»è“å›¾ä½¿ç”¨çš„
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AnimAttribute")
 		bool bAttack;

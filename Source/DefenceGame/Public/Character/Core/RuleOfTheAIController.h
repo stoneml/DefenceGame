@@ -17,13 +17,13 @@ class DEFENCEGAME_API ARuleOfTheAIController : public AAIController
 
 public:
 
-	//·µ»ØÄ¿±êActor ÈÃ×ÓÀàÈ¥¼Ì³Ğ
+	//è¿”å›ç›®æ ‡Actor è®©å­ç±»å»ç»§æ‰¿
 	virtual AActor* FindTarget() { return nullptr; };
 
-	//AIControllerµÄ¹¥»÷º¯Êı
-	virtual void AttackTarget(ARuleOfTheCharacter* Target) {};
+	//AIControllerçš„æ”»å‡»å‡½æ•°
+	virtual void AttackTarget(class ARuleOfTheCharacter* Target) {};
 	
-	//Controller»ñÈ¡Ä¿±ê
+	//Controllerè·å–ç›®æ ‡
 	TWeakObjectPtr<class ARuleOfTheCharacter> CurrentTarget;
 
 };

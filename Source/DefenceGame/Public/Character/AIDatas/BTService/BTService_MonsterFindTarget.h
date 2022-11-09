@@ -16,23 +16,22 @@ class DEFENCEGAME_API UBTService_MonsterFindTarget : public UBTService
 
 public:
 
-	//Ê¹ÓÃ¸¸ÀàTick
-	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+	//åˆ›å»ºåœ¨è“å›¾ä¸­å¯ä»¥æ·»åŠ çš„å‚æ•°
 
-	//´´½¨ÔÚÀ¶Í¼ÖĞ¿ÉÒÔÌí¼ÓµÄ²ÎÊı
-
-	//AIÄ¿±ê
+	//AIç›®æ ‡
 	UPROPERTY(EditAnywhere, Category = "Blackboard")
 		struct FBlackboardKeySelector BlackBoardKey_Target;
 
-	//Ä¿±ê¾àÀë
+	//å’Œç›®æ ‡çš„è·ç¦»
 	UPROPERTY(EditAnywhere, Category = "Blackboard")
 		struct FBlackboardKeySelector BlackBoardKey_Distance;
 
-	//Ä¿±êÎ»ÖÃ
+	//ç›®æ ‡ä½ç½®
 	UPROPERTY(EditAnywhere, Category = "BlackBoard")
 		struct FBlackboardKeySelector BlackBoardKey_TargetLocation;
 
+public:
+	//ä¸‹é¢ä¸‰ä¸ªæ¥å£éœ€è¦ç›´æ¥å…ˆå†™å¥½ã€‚
 	/** Notify called after GameplayTask finishes initialization (not active yet) */
 	virtual void OnGameplayTaskInitialized(UGameplayTask& Task) {}
 
@@ -42,10 +41,13 @@ public:
 	/** Notify called after GameplayTask changes state from Active (finishing or pausing) */
 	virtual void OnGameplayTaskDeactivated(UGameplayTask& Task) {}
 
+	//ä½¿ç”¨çˆ¶ç±»Tick ä»–å°±ç±»ä¼¼AIçš„å¿ƒè„ã€‚
+	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
 private:
 
-	//Ê¹ÓÃÈõÖ¸Õë´´½¨Ä¿±ê±äÁ¿£¬ÈõÖ¸ÕëÔÚÎŞĞ§ºó»á×Ô¶¯ÖÃ¿Õ£¬¿ÉÒÔÈ·±£²»»á³öÏÖÒ°Ö¸Õë
+	//ä½¿ç”¨å¼±æŒ‡é’ˆåˆ›å»ºç›®æ ‡å˜é‡ï¼Œå¼±æŒ‡é’ˆåœ¨æ— æ•ˆåä¼šè‡ªåŠ¨ç½®ç©ºï¼Œå¯ä»¥ç¡®ä¿ä¸ä¼šå‡ºç°é‡æŒ‡é’ˆ
+	//è¿™ä¸ªåªèƒ½ä½¿ç”¨åœ¨ç»§æ‰¿uobjectçš„ç±»å‹
 	TWeakObjectPtr <class ARuleOfTheCharacter> Target;
 	
 };

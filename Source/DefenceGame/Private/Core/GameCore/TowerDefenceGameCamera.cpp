@@ -12,26 +12,30 @@ ATowerDefenceGameCamera::ATowerDefenceGameCamera()
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	//ÔÚ¹¹Ôìº¯ÊıÖĞÊ¹ÓÃCreateDefaultSubobject
-	//Èç¹ûÔÚBeginPlayÖĞ½øĞĞ´´½¨µÄ»°¾ÍÊÇÓÃNewObject
+	//åœ¨æ„é€ å‡½æ•°ä¸­ä½¿ç”¨CreateDefaultSubobject
+	//å¦‚æœåœ¨BeginPlayä¸­è¿›è¡Œåˆ›å»ºçš„è¯å°±æ˜¯ç”¨NewObject
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("Boom"));
 	MainCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MainCamera"));
 	MarkBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Sign"));
 
-	//½«´´½¨ºÃµÄ×é¼ş°ó¶¨µ½¸ù×é¼ş
+	//å°†åˆ›å»ºå¥½çš„ç»„ä»¶ç»‘å®šåˆ°æ ¹ç»„ä»¶
 	CameraBoom->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	MainCamera->AttachToComponent(CameraBoom, FAttachmentTransformRules::KeepRelativeTransform);
 	MarkBox->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 
-	//ÉèÖÃµõ±Û²ÎÊı
+	//è®¾ç½®åŠè‡‚å‚æ•°
 	CameraBoom->TargetArmLength = 800.f;
-	CameraBoom->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));   //-60¾ÍÊÇÕı300
+	CameraBoom->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));   //-60å°±æ˜¯æ­£300
 
-	//ÉèÖÃMarkBoxµÄÅö×²Ô¤ÉèÎªĞÂÉèÖÃµÄControlPawnProfile
+	//è®¾ç½®MarkBoxçš„ç¢°æ’é¢„è®¾ä¸ºæ–°è®¾ç½®çš„ControlPawnProfile
 	MarkBox->SetCollisionProfileName(TEXT("ControlPawnProfile"));
+// 	MarkBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+// 	MarkBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);  //ç¢°æ’é€šé“å“åº”å…³é—­
+// 	MarkBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility,ECollisionResponse::ECR_Overlap);
+// 	MarkBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic,ECollisionResponse::ECR_Overlap);
 
-	//ĞŞ¸ÄÕâ¸ö¾Í¿ÉÒÔ½«µõ±ÛµÄÅö×²¹Ø±Õ
+	//ä¿®æ”¹è¿™ä¸ªå°±å¯ä»¥å°†åŠè‡‚çš„ç¢°æ’å…³é—­
 	CameraBoom->bDoCollisionTest = false;
 
 }
@@ -61,11 +65,11 @@ void ATowerDefenceGameCamera::SetupPlayerInputComponent(UInputComponent* PlayerI
 void ATowerDefenceGameCamera::Zoom(bool bDirection, const float& ZoomSpeed)
 {
 	
-	//ÅĞ¶Ï·½Ïò£¬µ½µ×ÊÇÏëÒª·Å´ó»¹ÊÇËõĞ¡
-	//±ä½¹ËÙ¶È
+	//åˆ¤æ–­æ–¹å‘ï¼Œåˆ°åº•æ˜¯æƒ³è¦æ”¾å¤§è¿˜æ˜¯ç¼©å°
+	//å˜ç„¦é€Ÿåº¦
 	if (bDirection)
 	{
-		//ÎªÕæ¾ÍÊÇÏòÇ°Ëõ·Å
+		//ä¸ºçœŸå°±æ˜¯å‘å‰ç¼©æ”¾
 		if (CameraBoom->TargetArmLength>=800)
 		{
 			CameraBoom->TargetArmLength -= ZoomSpeed * 2;
@@ -73,7 +77,7 @@ void ATowerDefenceGameCamera::Zoom(bool bDirection, const float& ZoomSpeed)
 	}
 	else
 	{
-		//Îª¼Ù¾ÍÊÇÏòºóËõ·Å
+		//ä¸ºå‡å°±æ˜¯å‘åç¼©æ”¾
 		if (CameraBoom->TargetArmLength<=800)
 		{
 			CameraBoom->TargetArmLength += ZoomSpeed * 2;

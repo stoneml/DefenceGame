@@ -22,7 +22,7 @@ ARuleOfTheCharacter* DefenceGameUtils::FindTargetRecently(const TArray<ARuleOfTh
 	if (InCharacters.Num())
 	{
 		//设置基本参考参数
-		float CharacterDistace = 99999999999.f;
+		float CharacterDistance = 99999999999.f;
 		int32 CharacterIndex = INDEX_NONE;
 
 		//对获取到的数组进行循环距离检测
@@ -38,11 +38,11 @@ ARuleOfTheCharacter* DefenceGameUtils::FindTargetRecently(const TArray<ARuleOfTh
 				float TmpDistace = TmpVector.Size();
 
 				//当距离小于当前最小距离并且目标还活着的时候
-				if (TmpDistace < CharacterDistace && TargetCharacter->IsActive())
+				if (TmpDistace < CharacterDistance && TargetCharacter->IsActive())
 				{
 					//满足条件就保存一次当前最近距离的TowerID和距离
 					CharacterIndex = i;
-					CharacterDistace = TmpDistace;
+					CharacterDistance = TmpDistace;
 				}
 			}
 

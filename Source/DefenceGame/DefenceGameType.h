@@ -21,17 +21,17 @@ namespace EGameCharacterType
 	};
 }
 
-//�ӵ�����
+//子弹类型
 UENUM(BlueprintType)
 enum class EBulletType:uint8
 {
-	BULLET_DIRECT_LINE,		//�ᴩ��
-	BULLET_LINE,			//ֱ���ӵ�
-	BULLET_TRACK_LINE,		//׷�ٵ�
-	BULLET_TRACK_LINE_SP,		//׷�ٵ�
-	BULLET_RANGE_LINE,		//�����߶�����
-	BULLET_RANGE,			//��Χ�˺�
-	BULLET_CHAIN			//��ʽ�ӵ�
+	BULLET_DIRECT_LINE,		//贯穿弹
+	BULLET_LINE,			//直线子弹
+	BULLET_TRACK_LINE,		//追踪弹
+	BULLET_TRACK_LINE_SP,		//追踪弹
+	BULLET_RANGE_LINE,		//抛物线丢手雷
+	BULLET_RANGE,			//范围伤害
+	BULLET_CHAIN			//链式子弹
 
 };
 
@@ -42,3 +42,4 @@ enum class ECharacterType: uint8
 	TOWER,
 	MONSTER
 };
+ 

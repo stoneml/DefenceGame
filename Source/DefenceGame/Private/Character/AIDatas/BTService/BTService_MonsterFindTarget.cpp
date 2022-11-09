@@ -13,61 +13,71 @@ void UBTService_MonsterFindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, u
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	//»ñÈ¡µ±Ç°ËùÓĞÕß¶ÔÓ¦µÄAIController
-	//»ñÈ¡µ±Ç°µÄºÚ°å×é¼şÍ¨¹ıOwnerComp
-	//Í¨¹ıControllerµÄfindtargetÀ´»ñÈ¡µ½µ±Ç°µÄÄ¿±ê
-	//ÅĞ¶ÏÈç¹ûĞÂÄ¿±ê²»ÊÇµ±Ç°Ä¿±ê£¬¾Í°Ñ»ñÈ¡µ½µÄÄ¿±êÉèÖÃ¸øTarget
-	// {  Í¨¹ıAIController»ñÈ¡µ½µ±Ç°Monster×Ô¼º
-	//		Í¨¹ıÊÇÓÃÒÆ¶¯×é¼şµÄStopMovementImmediatelyÀ´Í£Ö¹ÒÆ¶¯
+	//è·å–å½“å‰æ‰€æœ‰è€…å¯¹åº”çš„AIController
+	//è·å–å½“å‰çš„é»‘æ¿ç»„ä»¶é€šè¿‡OwnerComp
+	//é€šè¿‡Controllerçš„findtargetæ¥è·å–åˆ°å½“å‰çš„ç›®æ ‡
+	//åˆ¤æ–­å¦‚æœæ–°ç›®æ ‡ä¸æ˜¯å½“å‰ç›®æ ‡ï¼Œå°±æŠŠè·å–åˆ°çš„ç›®æ ‡è®¾ç½®ç»™Target
+	// {  é€šè¿‡AIControllerè·å–åˆ°å½“å‰Monsterè‡ªå·±
+	//		é€šè¿‡æ˜¯ç”¨ç§»åŠ¨ç»„ä»¶çš„StopMovementImmediatelyæ¥åœæ­¢ç§»åŠ¨
 	//	}
-	//ÅĞ¶Ïµ±Ç°TargetÊÇ·ñÊÇÓĞĞ§µÄ
-	//Èç¹ûÓĞĞ§{  }
+	//åˆ¤æ–­å½“å‰Targetæ˜¯å¦æ˜¯æœ‰æ•ˆçš„
+	//å¦‚æœæœ‰æ•ˆ{  }
 
 
-	//»ñÈ¡µ±Ç°ËùÓĞ×Å¶ÔÓ¦µÄAIController
-	//AMonsterAIController* MonsterAIController = Cast<AMonsterAIController>(OwnerComp.GetOwner(),Èç¹ûÖ»Õë¶Ô²éÕÒMonsterµÄ»°¡£
-	if (ARuleOfTheAIController* MonsterAIController = Cast<ARuleOfTheAIController>(OwnerComp.GetOwner()))
+	//è·å–å½“å‰æ‰€æœ‰ç€å¯¹åº”çš„AIController
+	//AMonsterAIController* MonsterAIController = Cast<AMonsterAIController>(OwnerComp.GetOwner(),å¦‚æœåªé’ˆå¯¹æŸ¥æ‰¾Monsterçš„è¯ã€‚
+	//å½“å‰è¡Œä¸ºæ ‘å¤–éƒ¨æ˜¯è°åœ¨ä½¿ç”¨ä»–ï¼Œè¿™é‡Œå°±æ˜¯MonsterAIContolleråœ¨ä½¿ç”¨
+	if (ARuleOfTheAIController* MonsterAIController = Cast<ARuleOfTheAIController>(OwnerComp.GetOwner()))  
 	{
-		//»ñÈ¡µ±Ç°ËùÓĞÕß£¨OwnerComp£©µÄºÚ°å
+		//è·å–å½“å‰æ‰€æœ‰è€…ï¼ˆOwnerCompï¼‰çš„é»‘æ¿
 		if (UBlackboardComponent* MyBlackboard = OwnerComp.GetBlackboardComponent())
 		{
-			//Í¨¹ıµ±Ç°AIController»ñÈ¡µ½µ±Ç°Ä¿±ê
+			//é€šè¿‡å½“å‰AIControllerè·å–åˆ°å½“å‰ç›®æ ‡
 			if (ARuleOfTheCharacter* NewTarget = Cast<ARuleOfTheCharacter>(MonsterAIController->FindTarget()))
 			{
-				//Èç¹û»ñÈ¡µ½µÄÄ¿±ê²»ÊÇµ±Ç°Ä¿±ê
+				//å¦‚æœè·å–åˆ°çš„ç›®æ ‡ä¸æ˜¯å½“å‰ç›®æ ‡
+				//if (Target!=NewTarget)
 				if (NewTarget!= MonsterAIController->CurrentTarget)
 				{
-					//Í¨¹ıAIController»ñÈ¡µ±ÓµÓĞÕßPawn£¬Á¢¼´Í£Ö¹ÒÆ¶¯£¬È»ºó½øĞĞÄ¿±êÇĞ»»
+					//é€šè¿‡AIControllerè·å–å½“æ‹¥æœ‰è€…Pawnï¼Œç«‹å³åœæ­¢ç§»åŠ¨ï¼Œç„¶åè¿›è¡Œç›®æ ‡åˆ‡æ¢
 					if (ARuleOfTheCharacter* MonsterSelf = Cast<ARuleOfTheCharacter>(MonsterAIController->GetPawn()))
 					{
-						//Stop Á¢¼´Í£Ö¹
+						//Stop ç«‹å³åœæ­¢
 						MonsterSelf->GetMovementComponent()->StopMovementImmediately();
 					}
-					//ĞÂÄ¿±ê¸³Öµ
+					//æ–°ç›®æ ‡èµ‹å€¼
+					//Target = NewTarget;
 					MonsterAIController->CurrentTarget = NewTarget;
 				}
 
-				//ĞÂÄ¿±ê¸³Öµ¸øºÚ°å
-				//ÅĞ¶Ïµ±Ç°Ä¿±ê£¨ÎŞÂÛĞÂ¾É£©ÊÇ·ñÓĞĞ§
+				//æ–°ç›®æ ‡èµ‹å€¼ç»™é»‘æ¿
+				//åˆ¤æ–­å½“å‰ç›®æ ‡ï¼ˆæ— è®ºæ–°æ—§ï¼‰æ˜¯å¦æœ‰æ•ˆ				
+
+				//if (Target.IsValid())
 				if (MonsterAIController->CurrentTarget.IsValid())
 				{
-					if (MonsterAIController->CurrentTarget->IsActive()) //Èç¹ûÄ¿±ê»¹»î×Å
+					//if (Target->IsActive())
+					if (MonsterAIController->CurrentTarget->IsActive()) //å¦‚æœç›®æ ‡è¿˜æ´»ç€
 					{
 
 						/*
-						//½øĞĞÒ»¸ö¼òµ¥µÄ¾àÀëÎ»ÖÃÉè¶¨
+						//è¿›è¡Œä¸€ä¸ªç®€å•çš„è·ç¦»ä½ç½®è®¾å®š
 						FVector CurrentFaceVecter = MonsterAIController->GetPawn()->GetActorLocation() - Target.Get()->GetActorLocation();	
 						CurrentFaceVecter.Normalize();
 						FVector MonsterAttackPos =CurrentFaceVecter * 800.f + Target.Get()->GetActorLocation();
 						MyBlackboard->SetValueAsVector(BlackBoardKey_TargetLocation.SelectedKeyName, MonsterAttackPos);
 						*/
 						
-						MyBlackboard->SetValueAsObject(BlackBoardKey_Target.SelectedKeyName, MonsterAIController->CurrentTarget.Get());  //target.Get£¨£©ÊÇÈõÖ¸Õë»ñÈ¡ÂãÖ¸ÕëµÄ·½·¨
-						//ÕÒµ½Ä¿±êºó¾Í·µ»ØÄ¿±êÎ»ÖÃ
+						MyBlackboard->SetValueAsObject(BlackBoardKey_Target.SelectedKeyName, MonsterAIController->CurrentTarget.Get());  //target.Getï¼ˆï¼‰æ˜¯å¼±æŒ‡é’ˆè·å–è£¸æŒ‡é’ˆçš„æ–¹æ³•
+						//æ‰¾åˆ°ç›®æ ‡åå°±è¿”å›ç›®æ ‡ä½ç½®
 						MyBlackboard->SetValueAsVector(BlackBoardKey_TargetLocation.SelectedKeyName, MonsterAIController->CurrentTarget.Get()->GetActorLocation());
+						
+						//MyBlackboard->SetValueAsObject(BlackBoardKey_Target.SelectedKeyName,Target.Get());  //target.Getï¼ˆï¼‰æ˜¯å¼±æŒ‡é’ˆè·å–è£¸æŒ‡é’ˆçš„æ–¹æ³•
+						//MyBlackboard->SetValueAsVector(BlackBoardKey_TargetLocation.SelectedKeyName, Target.Get()->GetActorLocation());
 					}
 					else
 					{
+						//ç›®æ ‡å·²ç»æ­»äº¡äº†
 						MyBlackboard->SetValueAsObject(BlackBoardKey_Target.SelectedKeyName, nullptr);
 						MyBlackboard->SetValueAsVector(BlackBoardKey_TargetLocation.SelectedKeyName, FVector::ZeroVector);
 					}
@@ -81,38 +91,39 @@ void UBTService_MonsterFindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, u
 			}
 			else
 			{
-				//Èç¹ûÎŞ·¨´ÓControllerÖĞ»ñÈ¡ĞÂÄ¿±ê£¬ÄÇÃ´¾Í·µ»ØÎª¿Õ
+				//å¦‚æœæ— æ³•ä»Controllerä¸­è·å–æ–°ç›®æ ‡ï¼Œé‚£ä¹ˆå°±è¿”å›ä¸ºç©º
 				MyBlackboard->SetValueAsObject(BlackBoardKey_Target.SelectedKeyName, nullptr);
 			}
 
 
-			//¼ÆËã¾àÀë
+			//è®¡ç®—è·ç¦»
 			if (MonsterAIController->CurrentTarget.IsValid())
 			{
-				//»ñÈ¡µ±Ç°Monster¾àÀë
+				//è·å–å½“å‰Monsterè·ç¦»
 				FVector MyLocation = MonsterAIController->GetPawn()->GetActorLocation();
 				FVector TMDistance = MyLocation - MonsterAIController->CurrentTarget->GetActorLocation();
+				//FVector TMDistance = MyLocation - Target->GetActorLocation();
 
 				if (ARuleOfTheCharacter* MonsterAI = Cast<ARuleOfTheCharacter>(MonsterAIController->GetPawn()))
 				{
-					//Éè¶¨Ò»¸ö¾àÀë
+					//è®¾å®šä¸€ä¸ªè·ç¦»
 					if (TMDistance.Size() >= 800)
 					{
-						//Èç¹û¾àÀë´óÓÚ800¾ÍÍ£Ö¹¹¥»÷
+						//å¦‚æœè·ç¦»å¤§äº800å°±åœæ­¢æ”»å‡»
 						MonsterAI->bAttack = false;
 					}
 					else
 					{
-						//Èç¹û²»Ğ¡ÓÚÄÇÃ´¾ÍÍ£Ö¹£¬Ö®ºó¿ªÊ¼½øĞĞ¹¥»÷¡££¨¹¥»÷Âß¼­ÔÚTaskÖĞ½øĞĞÖ´ĞĞ£©
+						//å¦‚æœä¸å°äºé‚£ä¹ˆå°±åœæ­¢ï¼Œä¹‹åå¼€å§‹è¿›è¡Œæ”»å‡»ã€‚ï¼ˆæ”»å‡»é€»è¾‘åœ¨Taskä¸­è¿›è¡Œæ‰§è¡Œï¼‰
 						MonsterAI->GetMovementComponent()->StopMovementImmediately();
 					}
 				}
-				//½«µ±Ç°¾àÀë·µ»Ø³öÈ¥
+				//å°†å½“å‰è·ç¦»è¿”å›å‡ºå»
 				MyBlackboard->SetValueAsFloat(BlackBoardKey_Distance.SelectedKeyName, TMDistance.Size());
 			}
 			else
 			{
-				//Èç¹ûÄ¿±êÎŞĞ§£¬·µ»Ø¾àÀëÎª0
+				//å¦‚æœç›®æ ‡æ— æ•ˆï¼Œè¿”å›è·ç¦»ä¸º0
 				MyBlackboard->SetValueAsFloat(BlackBoardKey_Distance.SelectedKeyName, 0.0f);
 			}
 		}
