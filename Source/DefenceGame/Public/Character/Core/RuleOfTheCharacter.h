@@ -120,10 +120,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AnimAttibute")
 	FGuid CurrentGUID;
 
-
 	FCharacterData TargetCharacterData;
-
-
 
 	//输入功能在Controller中实现，所以不需要在Pawn中还有
 	// Called to bind functionality to input

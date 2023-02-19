@@ -18,41 +18,41 @@
 #include "Engine/World.h"
 
 
-//´´½¨Ò»¸ö¾²Ì¬Êı¾İ£¬ÔÚĞèÒª·µ»Ø¿ÕÊı¾İµÄÊ±ºòÊ¹ÓÃ
+//åˆ›å»ºä¸€ä¸ªé™æ€æ•°æ®ï¼Œåœ¨éœ€è¦è¿”å›ç©ºæ•°æ®çš„æ—¶å€™ä½¿ç”¨
 FCharacterData CharacterDataNULL;
 FBuildingTower BuildingTowerNULL;
 
 ATowerDefenceGameState::ATowerDefenceGameState()
 {
-	//¿ªÆôTick
+	//å¼€å¯Tick
 	PrimaryActorTick.bCanEverTick = true;
 
-	//ÕâÀïÀ´»ñÈ¡À¶Í¼±í¸ñ¡£
+	//è¿™é‡Œæ¥è·å–è“å›¾è¡¨æ ¼ã€‚
 	static ConstructorHelpers::FObjectFinder<UDataTable>MyTable_AITowerObj(TEXT("DataTable'/Game/GameData/TowerData.TowerData'"));
 	static ConstructorHelpers::FObjectFinder<UDataTable>MyTable_AIMonsterObj(TEXT("/Game/GameData/MonsterData"));
 	AITowerCharacterData = MyTable_AITowerObj.Object;
 	AIMonsterCharacterData = MyTable_AIMonsterObj.Object;
 
 
-	//´´½¨µ±Ç°ËùÓĞÁĞ±í°´¼üµÄGUID
+	//åˆ›å»ºå½“å‰æ‰€æœ‰åˆ—è¡¨æŒ‰é”®çš„GUID
 	for (int32 i = 0; i < 21; i++)
 	{
 		GetSaveData()->BuildingTowers.Add(FGuid::NewGuid(), FBuildingTower());
-		
-		//AddBulidingTower(FGuid::NewGuid(), FBuildingTower());  //Ê¹ÓÃµ±Ç°×Ô¼ºĞ´µÄÌí¼Óº¯Êı¡£
+
+		//AddBulidingTower(FGuid::NewGuid(), FBuildingTower());  //ä½¿ç”¨å½“å‰è‡ªå·±å†™çš„æ·»åŠ å‡½æ•°ã€‚
 	}
 
 }
 
 ATowers* ATowerDefenceGameState::SpawnTower(int32 CharacterID, int32 CharacterLevel, const FVector& Location, const FRotator& Rotation)
 {
-	//Éú³ÉËş
+	//ç”Ÿæˆå¡”
 	return SpawnCharacter<ATowers>(CharacterID, CharacterLevel, AITowerCharacterData, Location, Rotation);
 }
 
 AMonster* ATowerDefenceGameState::SpawnMonster(int32 CharacterID, int32 CharacterLevel, const FVector& Location, const FRotator& Rotation)
 {
-	//Éú³É¹ÖÎï
+	//ç”Ÿæˆæ€ªç‰©
 	return SpawnCharacter<AMonster>(CharacterID, CharacterLevel, AIMonsterCharacterData, Location, Rotation);
 }
 
@@ -65,11 +65,12 @@ ARuleOfTheCharacter* ATowerDefenceGameState::SpawnCharacter(int32 CharacterID,
 
 	if (InCharacterData)
 	{
-		//Í¨¹ıRowÀ´»ñÈ¡¶ÔÓ¦DataTableÄÚÈİ
+		//é€šè¿‡Rowæ¥è·å–å¯¹åº”DataTableå†…å®¹
 		TArray<FCharacterData*> Datas;
-		InCharacterData->GetAllRows(TEXT("Character Data"), Datas);
+		//InCharacterData->GetAllRows(TEXT("Character Data"), Datas);
+		InCharacterData->GetAllRows(TEXT("aaaa"), Datas);
 
-		//Ê¹ÓÃÒ»¸öLambda¹«Ê½À´»ñÈ¡¶ÔÓ¦IDµÄÊı¾İĞÅÏ¢
+		//ä½¿ç”¨ä¸€ä¸ªLambdaå…¬å¼æ¥è·å–å¯¹åº”IDçš„æ•°æ®ä¿¡æ¯
 		auto GetCharacterData = [&](int32 ID)->FCharacterData*
 		{
 			for (auto& tmp : Datas)
@@ -80,26 +81,26 @@ ARuleOfTheCharacter* ATowerDefenceGameState::SpawnCharacter(int32 CharacterID,
 				}
 			}
 			return nullptr;
-		};  //LambdaºóÃæĞèÒªÓÃ·ÖºÅ½áÎ²
+		};  //Lambdaåé¢éœ€è¦ç”¨åˆ†å·ç»“å°¾
 
 		if (FCharacterData* CharacterData = GetCharacterData(CharacterID))
 		{
-			//¶ÁÈ¡¶ÔÓ¦µÄÀà
-			UClass* NewClass = GetCharacterData(CharacterID)->CharacterBlueprintKey.LoadSynchronous();  //Í¬²½¶ÁÈ¡Êı¾İ
+			//è¯»å–å¯¹åº”çš„ç±»
+			UClass* NewClass = GetCharacterData(CharacterID)->CharacterBlueprintKey.LoadSynchronous();  //åŒæ­¥è¯»å–æ•°æ®
 
 			if (GetWorld() && NewClass)
 			{
 				if (ARuleOfTheCharacter* RuleOfCharacter = GetWorld()->SpawnActor<ARuleOfTheCharacter>(NewClass, Location, Rotation))
 				{
-					/*//¸øµ±Ç°Òª´´½¨µÄCharacter´´½¨Ò»¸ö¶ÔÓ¦µÄGUID
+					/*//ç»™å½“å‰è¦åˆ›å»ºçš„Characteråˆ›å»ºä¸€ä¸ªå¯¹åº”çš„GUID
 					RuleOfCharacter->GUID = FGuid::NewGuid();*/
-					//´´½¨Ò»¸öĞÂµÄdata£¬È»ºó¸³Öµ
+					//åˆ›å»ºä¸€ä¸ªæ–°çš„dataï¼Œç„¶åèµ‹å€¼
 					//RuleOfCharacter->CurrentGUID = FGuid::NewGuid();
 
 					UKismetSystemLibrary::PrintString(this, RuleOfCharacter->CurrentGUID.ToString(),true,true,FLinearColor::Blue,5.f);
 
 					CharacterData->UpdateHealth();
-/*					//¼ì²éµ±Ç°UIÊı×é
+/*					//æ£€æŸ¥å½“å‰UIæ•°ç»„
 					CharacterIDs.Add(RuleOfCharacter->CurrentGUID);
 					UKismetSystemLibrary::PrintString(this, FString::FromInt(CharacterIDs.Num()));*/
 					AddFCharacterData(RuleOfCharacter->CurrentGUID, *CharacterData);
@@ -116,11 +117,11 @@ ARuleOfTheCharacter* ATowerDefenceGameState::SpawnCharacter(int32 CharacterID,
 
 AActor* ATowerDefenceGameState::SpawnTowersDoll(int32 InID)
 {
-	//»áÊ¹ÓÃµ½Ò»¸öAStaticMeshActor(UE×Ô¼ºµÄ£©
-	//ÓÃÀ´Éú³ÉÌæ´úÄ£ĞÍ
+	//ä¼šä½¿ç”¨åˆ°ä¸€ä¸ªAStaticMeshActor(UEè‡ªå·±çš„ï¼‰
+	//ç”¨æ¥ç”Ÿæˆæ›¿ä»£æ¨¡å‹
 
 	AActor* OutActor = nullptr;
-	//Ê×ÏÈ´Ódatatable»ñÈ¡Êı¾İ
+	//é¦–å…ˆä»datatableè·å–æ•°æ®
 	TArray<const FCharacterData*> TmpDatas;
 	GetTowerCharacterDataFromTable(TmpDatas);
 
@@ -128,36 +129,36 @@ AActor* ATowerDefenceGameState::SpawnTowersDoll(int32 InID)
 	{
 		if (tmp->CharacterID == InID)
 		{
-			//»ñÈ¡Ö®Ç°±£´æµÄTSubClassOfµÄÀà
+			//è·å–ä¹‹å‰ä¿å­˜çš„TSubClassOfçš„ç±»
 			UClass* NewClass = tmp->CharacterBlueprintKey.LoadSynchronous();
 
 			if (GetWorld() && NewClass)
 			{
 				if (ARuleOfTheCharacter* RuleOfActor = GetWorld()->SpawnActor<ARuleOfTheCharacter>(NewClass,FVector::ZeroVector,FRotator::ZeroRotator))
 				{
-					//ĞèÒªÊ¹ÓÃµ½AStaticMeshActor¡£
+					//éœ€è¦ä½¿ç”¨åˆ°AStaticMeshActorã€‚
 					if (AStaticMeshActor* MeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator))
 					{
 						if (UStaticMesh* TargetMesh = RuleOfActor->GetDollMesh())
 						{
-							//×îºóÉèÖÃ»ñÈ¡µ½µÄRuleOfCharacterµÄmesh¸øMeshActor
+							//æœ€åè®¾ç½®è·å–åˆ°çš„RuleOfCharacterçš„meshç»™MeshActor
 							MeshActor->SetMobility(EComponentMobility::Movable);
 							MeshActor->GetStaticMeshComponent()->SetStaticMesh(TargetMesh);
 							MeshActor->GetStaticMeshComponent()->SetMobility(EComponentMobility::Movable);
 							OutActor = MeshActor;
-							RuleOfActor->Destroy();  //É¾³ıÁÙÊ±´´½¨µÄRuleActor
+							RuleOfActor->Destroy();  //åˆ é™¤ä¸´æ—¶åˆ›å»ºçš„RuleActor
 
 						}
 						else
 						{
-							//Èç¹û»ñÈ¡²»³É¹¦£¬¾Í°ÑÉú³ÉµÄÄÇÁ½¸öactor½øĞĞÏú»Ù
+							//å¦‚æœè·å–ä¸æˆåŠŸï¼Œå°±æŠŠç”Ÿæˆçš„é‚£ä¸¤ä¸ªactorè¿›è¡Œé”€æ¯
 							MeshActor->Destroy();
 							RuleOfActor->Destroy();
 						}
 					}
 					else
 					{
-						//MeshActorÉú³É²»³É¹¦¾Í½«ruleOfActor½øĞĞÏú»Ù
+						//MeshActorç”Ÿæˆä¸æˆåŠŸå°±å°†ruleOfActorè¿›è¡Œé”€æ¯
 						RuleOfActor->Destroy();
 					}
 				}
@@ -173,19 +174,19 @@ AActor* ATowerDefenceGameState::SpawnTowersDoll(int32 InID)
 
 const FCharacterData& ATowerDefenceGameState::AddFCharacterData(const FGuid& ID, const FCharacterData& Data)
 {
-	//Ìí¼Ó¶ÔÓ¦µÄ½ÇÉ«Êı¾İ
+	//æ·»åŠ å¯¹åº”çš„è§’è‰²æ•°æ®
 	return GetSaveData()->CharacterDatas.Add(ID, Data);
 }
 
 bool ATowerDefenceGameState::RemoveCharacterData(const FGuid& ID)
 {
-	//Èç¹ûÉ¾³ıÎŞĞ§»á·µ»Ø0£¬É¾³ı³É¹¦»á·µ»Ø¶ÔÓ¦µÄID
+	//å¦‚æœåˆ é™¤æ— æ•ˆä¼šè¿”å›0ï¼Œåˆ é™¤æˆåŠŸä¼šè¿”å›å¯¹åº”çš„ID
 	return (bool)GetSaveData()->CharacterDatas.Remove(ID);
 }
 
 FCharacterData& ATowerDefenceGameState::GetCharacterData(const FGuid& ID)
 {
-	//Í¨¹ı±éÀúËùÓĞµÄ½ÇÉ«Êı¾İÀ´·µ»ØÖ¸¶¨µÄÊı¾İ
+	//é€šè¿‡éå†æ‰€æœ‰çš„è§’è‰²æ•°æ®æ¥è¿”å›æŒ‡å®šçš„æ•°æ®
 	if (GetSaveData()->CharacterDatas.Contains(ID))
 	{
 		return GetSaveData()->CharacterDatas[ID];
@@ -200,7 +201,7 @@ FCharacterData& ATowerDefenceGameState::GetCharacterData(const FGuid& ID)
 		}
 	}*/
 
-	//·µ»Ø´íÎóĞÅÏ¢
+	//è¿”å›é”™è¯¯ä¿¡æ¯
 	//SD_print_r(Error,"The current [%s] is invalid", *ID.ToString());
 	return CharacterDataNULL;
 }
@@ -209,7 +210,7 @@ UGameSaveData* ATowerDefenceGameState::GetSaveData()
 {
 	if (!CurrentSaveData)
 	{
-		//»ñÈ¡µ±Ç°µÄGameSaveData
+		//è·å–å½“å‰çš„GameSaveData
 		CurrentSaveData = Cast<UGameSaveData>(UGameplayStatics::CreateSaveGameObject(UGameSaveData::StaticClass()));
 	}
 	return CurrentSaveData;
@@ -219,10 +220,10 @@ UGameSaveSlotList* ATowerDefenceGameState::GetGameSaveSlotList()
 {
 	if (!CurrentSaveList)
 	{
-		//Ê×ÏÈ½øĞĞSlotµÄ¶ÁÈ¡
+		//é¦–å…ˆè¿›è¡ŒSlotçš„è¯»å–
 		CurrentSaveList = Cast<UGameSaveSlotList>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SlotList")), 0));
 
-		//Èç¹û¶ÁÈ¡Ê§°ÜµÄ»°¾Í´´½¨Ò»¸ö
+		//å¦‚æœè¯»å–å¤±è´¥çš„è¯å°±åˆ›å»ºä¸€ä¸ª
 		if (!CurrentSaveList)
 		{
 			CurrentSaveList = Cast<UGameSaveSlotList>(UGameplayStatics::CreateSaveGameObject(UGameSaveSlotList::StaticClass()));
@@ -233,13 +234,13 @@ UGameSaveSlotList* ATowerDefenceGameState::GetGameSaveSlotList()
 
 bool ATowerDefenceGameState::SaveGameData(int32 SaveNumber)
 {
-	//ÅĞ¶ÏÊÇ·ñÓĞĞ§£¬Èç¹ûÓĞĞ§¾Í½øĞĞ±£´æ
+	//åˆ¤æ–­æ˜¯å¦æœ‰æ•ˆï¼Œå¦‚æœæœ‰æ•ˆå°±è¿›è¡Œä¿å­˜
 	if (CurrentSaveData&&CurrentSaveList)
 	{
-		//±£´æµ±Ç°µÄSlot
+		//ä¿å­˜å½“å‰çš„Slot
 		CurrentSaveList->CurrentSlotList.AddGameData(SaveNumber);
 
-		//Ö»ÓĞÂú×ãslotºÍ´æµµ¶¼½øĞĞ±£´æ³É¹¦ÁË²Å·µ»ØÕæ
+		//åªæœ‰æ»¡è¶³slotå’Œå­˜æ¡£éƒ½è¿›è¡Œä¿å­˜æˆåŠŸäº†æ‰è¿”å›çœŸ
 		return UGameplayStatics::SaveGameToSlot(CurrentSaveList, FString::Printf(TEXT("SlotList")), 0)
 			&& UGameplayStatics::SaveGameToSlot(CurrentSaveData, FString::Printf(TEXT("SaveSlot_%i"), SaveNumber), 0);
 	}
@@ -248,10 +249,10 @@ bool ATowerDefenceGameState::SaveGameData(int32 SaveNumber)
 
 bool ATowerDefenceGameState::LoadSaveGameData(int32 SaveNumber)
 {
-	//¶ÁÈ¡µ±Ç°µÄ´æ´¢Êı¾İ
+	//è¯»å–å½“å‰çš„å­˜å‚¨æ•°æ®
 	CurrentSaveData = Cast<UGameSaveData>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SaveSlot_%i"), SaveNumber), 0));
 
-	//Èç¹û²»Îª¿Õ¾Í·µ»ØÕæ
+	//å¦‚æœä¸ä¸ºç©ºå°±è¿”å›çœŸ
 	return CurrentSaveData != nullptr;
 }
 
@@ -259,7 +260,7 @@ bool ATowerDefenceGameState::LoadSaveGameData(int32 SaveNumber)
 
 FBuildingTower& ATowerDefenceGameState::GetBuildingTower(const FGuid& ID)
 {
-	//»ñÈ¡Êı×éÖĞµÄBuildingTowerĞÅÏ¢
+	//è·å–æ•°ç»„ä¸­çš„BuildingTowerä¿¡æ¯
 	if (GetSaveData()->BuildingTowers.Contains(ID))
 	{
 		return GetSaveData()->BuildingTowers[ID];
@@ -271,9 +272,9 @@ FBuildingTower& ATowerDefenceGameState::GetBuildingTower(const FGuid& ID)
 
 TArray<const FGuid*> ATowerDefenceGameState::GetBuildingTowerID()
 {
-	//´´½¨Ò»¸öÁÙÊ±µÄID
+	//åˆ›å»ºä¸€ä¸ªä¸´æ—¶çš„ID
 	TArray<const FGuid*>TempID;
-	//Ñ­»·±éÀúµ±Ç°ÒÑÓĞµÄID£¬È»ºó½øĞĞÒ»¸ö´«µİ¿½±´¡£
+	//å¾ªç¯éå†å½“å‰å·²æœ‰çš„IDï¼Œç„¶åè¿›è¡Œä¸€ä¸ªä¼ é€’æ‹·è´ã€‚
 	for (auto& Tmp : GetSaveData()->BuildingTowers)
 	{
 		TempID.Add(&Tmp.Key);
@@ -285,7 +286,7 @@ TArray<const FGuid*> ATowerDefenceGameState::GetBuildingTowerID()
 
 const FBuildingTower& ATowerDefenceGameState::AddBulidingTower(const FGuid& ID, const FBuildingTower& Data)
 {
-	//Ìí¼Ó¶ÔÓ¦µÄTowerData
+	//æ·»åŠ å¯¹åº”çš„TowerData
 	return GetSaveData()->BuildingTowers.Add(ID, Data);
 }
 
@@ -297,7 +298,13 @@ bool ATowerDefenceGameState::GetTowerCharacterDataFromTable(TArray<const FCharac
 		AITowerCharacterData->GetAllRows(TEXT("Character Data"), TowerCacheDatas);
 	}
 
-	//»ñÈ¡µ½Êı¾İºó£¬½«Êı¾İ´«Èë
+
+// 	for (auto& tmpName: AITowerCharacterData->GetRowNames())
+// 	{
+// 		AITowerCharacterData->GetAllRows()
+// 	}
+
+	//è·å–åˆ°æ•°æ®åï¼Œå°†æ•°æ®ä¼ å…¥
 	for (const auto &Tmp : TowerCacheDatas)
 	{
 		Datas.Add(Tmp);
@@ -325,7 +332,7 @@ bool ATowerDefenceGameState::GetMonsterCharacterDataFromTable(TArray<const FChar
 
 const FCharacterData ATowerDefenceGameState::GetCharacterDataByID(int32 InID, ECharacterType Type /*= ECharacterType::TOWER*/)
 {
-	//ÕâÀïµÄconst FCharacterDataÊÇµÚÒ»´Î¸³ÖµµÄÊ±£¬ËùÒÔ¿ÉÒÔÊ¹ÓÃÕâ¸ö
+	//è¿™é‡Œçš„const FCharacterDataæ˜¯ç¬¬ä¸€æ¬¡èµ‹å€¼çš„æ—¶ï¼Œæ‰€ä»¥å¯ä»¥ä½¿ç”¨è¿™ä¸ª
 	//TArray<const FCharacterData* > TempDatas;
 	TArray<const FCharacterData* > TempDatas;
 	switch (Type)
@@ -339,7 +346,7 @@ const FCharacterData ATowerDefenceGameState::GetCharacterDataByID(int32 InID, EC
 		break;
 	}
 
-	//±éÀú»ñÈ¡µ½µÄÊı×é£¬½øĞĞIDËÑË÷
+	//éå†è·å–åˆ°çš„æ•°ç»„ï¼Œè¿›è¡ŒIDæœç´¢
 	for (const auto & Tmp : TempDatas)
 	{
 		if (Tmp->CharacterID == InID)
@@ -348,7 +355,7 @@ const FCharacterData ATowerDefenceGameState::GetCharacterDataByID(int32 InID, EC
 		}
 	}
 
-	//Èç¹ûÃ»ÓĞËÑË÷µ½¾Í·µ»Ø¿ÕÊı¾İ
+	//å¦‚æœæ²¡æœ‰æœç´¢åˆ°å°±è¿”å›ç©ºæ•°æ®
 	return CharacterDataNULL;
 }
 
@@ -378,16 +385,16 @@ void ATowerDefenceGameState::PrintInfo()
 bool ATowerDefenceGameState::RequestInvetorySlotSwap(const FGuid& A, const FGuid& B)
 {
 
-	FBuildingTower& ASlot = GetBuildingTower(A);  //AÊÇÄ¿±êSlot
+	FBuildingTower& ASlot = GetBuildingTower(A);  //Aæ˜¯ç›®æ ‡Slot
 	FBuildingTower& BSlot = GetBuildingTower(B);
 
-	if (ASlot.IsValid())  //½»»»
+	if (ASlot.IsValid())  //äº¤æ¢
 	{
 		FBuildingTower Temp = ASlot;
 		ASlot = BSlot;
 		BSlot = Temp;
 	}
-	else //ÒÆ¶¯
+	else //ç§»åŠ¨
 	{
 		ASlot = BSlot;
 		BSlot.InitSaveData();

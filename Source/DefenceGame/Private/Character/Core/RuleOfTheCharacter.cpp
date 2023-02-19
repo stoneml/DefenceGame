@@ -134,12 +134,8 @@ UStaticMesh* ARuleOfTheCharacter::GetDollMesh()
 				FTransform MeshTransform = NewSkeletalMeshComponent->GetComponentTransform();
 				return NewStaticMesh;
 			}
-
-
 		}
-
 	}
-
 
 	return nullptr;
 }
@@ -239,10 +235,10 @@ bool ARuleOfTheCharacter::IsTeam()
 
 FCharacterData& ARuleOfTheCharacter::GetCharacterData()
 {
+
 	if (GetGameState())
 	{
-		//return GetGameState()->GetCharacterData(CurrentGUID);
-		TargetCharacterData = GetGameState()->GetCharacterData(CurrentGUID);
+		return GetGameState()->GetCharacterData(CurrentGUID);
 	}
 
 	//调用在GameState中的 extern CharacterDataNull，这个相当于static调用。
